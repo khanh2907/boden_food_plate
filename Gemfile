@@ -20,6 +20,9 @@ gem 'jquery-datatables-rails', '~> 3.1.1'
 gem 'font-awesome-rails'
 gem 'parsley-rails'
 gem 'roo'
+gem 'sunspot_rails'
+gem 'sunspot_solr'
+gem 'progress_bar'
 
 group :development do
   gem 'better_errors'
