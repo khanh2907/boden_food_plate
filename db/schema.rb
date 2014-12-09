@@ -11,10 +11,34 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141206084601) do
+ActiveRecord::Schema.define(version: 20141209123905) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "food_categories", force: true do |t|
+    t.string   "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "foods", force: true do |t|
+    t.string   "serving_size"
+    t.float    "serving_weight"
+    t.float    "energy"
+    t.float    "protein"
+    t.float    "total_fat"
+    t.float    "saturated_fat"
+    t.float    "cholesterol"
+    t.float    "carbohydrate"
+    t.float    "sugars"
+    t.float    "dietary_fibre"
+    t.float    "sodium"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "food_category_id"
+    t.string   "name"
+  end
 
   create_table "users", force: true do |t|
     t.string   "email",                  default: "", null: false
