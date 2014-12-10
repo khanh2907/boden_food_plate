@@ -1,5 +1,5 @@
 class Food < ActiveRecord::Base
-  belongs_to :food_category, touch: true
+  belongs_to :food_category
 
   searchable do
     text :name

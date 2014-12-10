@@ -27,10 +27,12 @@ namespace :foods do
         food.serving_size = food_hash["Serving size"]        unless food_hash["Serving size"].nil?
         food.serving_weight = food_hash["Serving weight (g)"]  unless food_hash["Serving weight (g)"].nil?
         food.energy = food_hash["Energy (kJ)"]         unless food_hash["Energy (kJ)"].nil?
+        food.energy_c = food_hash["Energy (Calories)"]         unless food_hash["Energy (Calories)"].nil?
         food.protein = food_hash["Protein (g)"]         unless food_hash["Protein (g)"].nil?
         food.total_fat = food_hash["Total Fat (g)"]       unless food_hash["Total Fat (g)"].nil?
         food.saturated_fat = food_hash["Saturated Fat (g)"]   unless food_hash["Saturated Fat (g)"].nil?
         food.cholesterol = food_hash["Cholesterol (mg)"]    unless food_hash["Cholesterol (mg)"].nil?
+        food.carbohydrate = food_hash["Carbohydrate (g)"] unless food_hash["Carbohydrate (g)"].nil?
         food.sugars = food_hash["Sugars (g)"]          unless food_hash["Sugars (g)"].nil?
         food.dietary_fibre = food_hash["Dietary Fibre (g)"]   unless food_hash["Dietary Fibre (g)"].nil?
         food.sodium = food_hash["Sodium (mg)"]         unless food_hash["Sodium (mg)"].nil?

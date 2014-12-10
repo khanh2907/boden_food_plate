@@ -1,0 +1,54 @@
+<div class="col-md-12">
+  <h3><%= @food_category.name %></h3>
+  <hr>
+  <table class="table table-striped" id="foods-table">
+    <thead>
+    <th>Food Name</th>
+    <th>Serving size</th>
+    <th>Serving weight (g)</th>
+    <th>Energy (kJ)</th>
+    <th>Energy (Calories)</th>
+    <th>Protein (g)</th>
+    <th>Total Fat (g)</th>
+    <th>Saturated Fat (g)</th>
+    <th>Cholesterol (mg)</th>
+    <th>Carbohydrate (g)</th>
+    <th>Sugars (g)</th>
+    <th>Dietary Fibre (g)</th>
+    <th>Sodium (mg)</th>
+    </thead>
+    <tbody>
+    <% @food_category.foods.each do |food| %>
+      <tr>
+        <td><%= food.name %></td>
+        <td><%= food.serving_size %></td>
+        <td><%= food.serving_weight %></td>
+        <td><%= food.energy %></td>
+        <td><%= food.energy_c %></td>
+        <td><%= food.protein %></td>
+        <td><%= food.total_fat %></td>
+        <td><%= food.saturated_fat %></td>
+        <td><%= food.cholesterol %></td>
+        <td><%= food.carbohydrate %></td>
+        <td><%= food.sugars %></td>
+        <td><%= food.dietary_fibre %></td>
+        <td><%= food.sodium %></td>
+      </tr>
+    <% end %>
+    </tbody>
+  </table>
+</div>
+
+<script>
+  // Initialise the user table
+  $('#foods-table').dataTable({
+    "aLengthMenu": [[25, 50, 100, 200, -1], [25, 50, 100, 200, "All"]],
+    "iDisplayLength": 25
+  });
+
+  // User Role Change AJAX submit
+  $('#user_role').on('change', function(e) {
+    var $form = $(this).parent('form');
+    $.post($form.attr('action'), $form.serialize());
+  })
+</script>
