@@ -1,0 +1,45 @@
+<div id="search-wrapper">
+  <input class="typeahead" type="text" placeholder="Articles">
+</div>
+
+<script>
+
+  // Create a new Bloodhound suggestion engine.
+  foods = new Bloodhound({
+    datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
+    queryTokenizer: Bloodhound.tokenizers.whitespace,
+    remote: {
+      // The controller of this path will do a search through
+      // Apache Solr and it returns the data in the required format.
+      // The %QUERY will be replaced by the Bloodhound engine
+      // with the search terms we typed in the search box.
+      url: '/search/query?q=%QUERY'
+    }
+  })
+
+  // Initialize the engine
+  foods.initialize()
+
+  // Transform the input box to a typeahead search field.
+  // The first parameter is an options object.
+  // Typeahead can be customized by this object.
+  // More information can be found at:
+  //  https://github.com/twitter/typeahead.js/blob/master/doc/jquery_typeahead.md#options
+    // The second parameter is a dataset that provides data filtered
+    // by the search term we typed into the search box.
+      $('input.typeahead').typeahead(
+          {
+            hint: true,
+            highlight: true,
+            minLength: 1
+          },
+          {
+            // Name of the dataset
+            name: 'foods',
+            // The key of the value in the response.
+            // This value will be displayed as suggestion.
+            displayKey: 'name',
+            // The source of the dataset is the Bloodhound engine.
+            source: foods.ttAdapter()
+          })
+</script>

@@ -15,6 +15,7 @@
 //= require dataTables/jquery.dataTables
 //= require dataTables/bootstrap/3/jquery.dataTables.bootstrap
 //= require parsley
+//= require twitter/typeahead
 //= require turbolinks
 //= require bootstrap-sprockets
 //= require_tree .
@@ -22,7 +23,6 @@
 function ready() {
     // Enable parsley js validation
     $('form[data-validate="parsley"] .btn-primary').on('click', function(e) {
-        console.log('validate!')
         $('form').parsley().validate();
     });
 }

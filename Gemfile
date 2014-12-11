@@ -23,6 +23,7 @@ gem 'roo'
 gem 'sunspot_rails'
 gem 'sunspot_solr'
 gem 'progress_bar'
+gem 'twitter-typeahead-rails'
 
 group :development do
   gem 'better_errors'
