@@ -1,0 +1,46 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md-10 col-md-offset-1">
+      <h3>
+        Food Diaries
+        <%= link_to new_food_diary_path do %>
+          <btn class="btn btn-primary pull-right"><%= fa_icon "plus" %> New Food Diary</btn>
+        <% end %>
+      </h3>
+
+      <table class="table table-striped" id="food-diary-table">
+        <thead>
+        <th>Participant ID</th>
+        <th>Visit Number</th>
+        <th>Date</th>
+        <th></th>
+        </thead>
+        <tbody>
+        <% @food_diaries.each do |fd| %>
+          <tr>
+            <td><%= fd.participant.pid %></td>
+            <td><%= fd.visit_number %></td>
+            <td><%= fd.created_at %></td>
+            <td>
+              <%= link_to(food_diary_path(fd), :data => { :confirm => "Are you sure?" }, :method => :delete, :class => 'btn btn-xs btn-danger') do %>
+                <%= fa_icon "trash" %> Delete
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Initialise the user table
+  $('#food-diary-table').dataTable({
+    "aoColumnDefs": [
+      { 'bSortable': false, 'aTargets': [ 3 ] }
+    ],
+    "aLengthMenu": [[25, 50, 100, 200, -1], [25, 50, 100, 200, "All"]],
+    "iDisplayLength": 25
+  });
+</script>

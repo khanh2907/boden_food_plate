@@ -1,0 +1,27 @@
+<%= simple_form_for(@food_diary, :html => { :data => {:validate => 'parsley'}}) do |f| %>
+  <%= f.error_notification %>
+
+  <div class="form-inputs">
+    <%= f.simple_fields_for :participant do |p| %>
+      <p>
+        <%= p.label 'Participant ID', :pid %>
+        <%= p.text_field :pid, class: 'form-control', placeholder: 'nn/aa', :required => true, :pattern => '\d{2}\/[a-zA-Z]{2}', "data-parsley-pattern-message" => 'Incorrect format. It must be Participant ID / First and Last Initials'%>
+      </p>
+      <p>
+        <%= p.label :date_of_birth %>
+        <%= p.date_field :date_of_birth, class: 'form-control', placeholder: 'DD/MM/YYYY', :required => true%>
+      </p>
+      <p>
+        <%= p.label :gender %>
+        <%= p.select :gender, Participant.genders.keys.map {|gender| [gender.titleize,gender]}, {}, { :class => 'form-control', :required => true }%>
+      </p>
+    <% end %>
+    <%= f.input :visit_number, :input_html => {"data-parsley-min" => "1"} %>
+  </div>
+
+  <div class="form-actions">
+    <%= f.button :submit, :class => 'btn btn-primary btn-lg centerize' %>
+  </div>
+<% end %>
+
+

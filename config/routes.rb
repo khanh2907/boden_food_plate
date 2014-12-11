@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  resources :food_diaries
+
   get 'search/index'
   get 'search/query'
 

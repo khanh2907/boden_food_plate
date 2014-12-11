@@ -69,8 +69,11 @@ body {
   text-align: center;
 }
 
-
 li.form-error {
   color: darkred;
   list-style-type: none;
+}
+
+.dataTables_wrapper {
+  margin-top: 25px;
 }
