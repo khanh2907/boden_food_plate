@@ -96,10 +96,14 @@
         <div class="table">
           <div class="plates">
             <% @food_diary.meals.each_with_index do |meal, index| %>
-              <plate data-meal-id="<%= meal.id %>" class="<%= 'strobe' if index == 0 %>" id="<%=index%>"></plate>
+              <plate data-meal-id="<%= meal.id %>" class="<%= 'strobe' if index == 0 %>" id="<%=index%>">
+                <div class="food-counter"><%= meal.foods.count %></div>
+              </plate>
             <% end %>
             <% if @food_diary.meals.empty? %>
-              <plate id=0 class="strobe"></plate>
+              <plate id=0 class="strobe">
+                <div class="food-counter">0</div>
+              </plate>
             <% end %>
           </div>
           <div class="pull-right">
@@ -148,7 +152,7 @@
         var trHtml = '<tr class="food" data-food-id="'+ foodId +'"><td>' + foodName + '</td></tr>';
         $('.delete-after-first').hide();
         $('.current-plate-details').find('tbody').append(trHtml);
-
+        updateFoodCounter();
       }
     });
 
@@ -161,10 +165,9 @@
     $('#new-meal-btn').on('click', function(e) {
       var id = $('plate').length;
       $('.strobe').removeClass('strobe');
-      $('.plates').append('<plate id="'+ id +'" class="strobe"></plate>');
+      $('.plates').append('<plate id="'+ id +'" class="strobe"><div class="food-counter">0</div></plate>');
 
       $('.current-plate').removeClass('current-plate').addClass('hidden');
-      $('bplate').append('<div class="food-goes-here" id="'+ id +'"></div>');
       $('bplate').append('<div class="food-goes-here current-plate" id="'+ id +'"></div>');
 
       var html = '<div class="plate-detail current-plate-details" id="'+ id +'">' +
@@ -214,7 +217,13 @@
       $('.current-plate').html('');
       $('.current-plate-details').find('tr.food').remove();
       $('.delete-after-first').show();
+      updateFoodCounter();
     });
+
+    function updateFoodCounter() {
+      var foodCounter = $('.strobe .food-counter');
+      foodCounter.html($('.current-plate').find('img').length);
+    }
   });
 
 </script>

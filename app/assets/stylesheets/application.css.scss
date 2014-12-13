@@ -361,3 +361,9 @@ table.tableSection th, table.tableSection td {
   background-color: rgba(0,0,0,.5);
   -webkit-box-shadow: 0 0 1px rgba(255,255,255,.5);
 }
+
+.food-counter {
+  left: calc(50% - 5px);
+  top: calc(50% - 10px);
+  position: absolute;
+}
