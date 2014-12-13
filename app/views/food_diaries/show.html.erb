@@ -28,7 +28,7 @@
     <div class="col-md-8 col-md-offset-2 no-plates-div" style="display:none;">
       <div class="form-box text-center">
         <h2>Uh oh! You have no plates!</h2>
-        <a class="btn btn-primary btn-lg" id="new-meal-btn">New Meal</a>
+        <a class="btn btn-primary btn-lg new-meal-btn">New Meal</a>
         <br>
         <h4>Click this button to create a new meal.</h4>
         <a></a>
@@ -114,7 +114,7 @@
             <% end %>
           </div>
           <div class="pull-right">
-            <a class="btn btn-primary btn-lg" id="new-meal-btn">New Meal</a>
+            <a class="btn btn-primary btn-lg new-meal-btn">New Meal</a>
             <a class="btn btn-success btn-lg">Next Day</a>
           </div>
         </div>
@@ -200,7 +200,7 @@
 
     applyPlateOnClick();
 
-    $('#new-meal-btn').on('click', function(e) {
+    $('.new-meal-btn').on('click', function(e) {
       var id = plateCounter;
       $('.strobe').removeClass('strobe');
       $('.plates').append('<plate id="'+ id +'" class="strobe"><div class="food-counter">0</div></plate>');

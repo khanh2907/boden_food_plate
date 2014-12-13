@@ -388,3 +388,7 @@ table.tableSection th, table.tableSection td {
 .no-plates-div {
   height: 550px;
 }
+
+.tooltip.in {
+  z-index: 99999999;
+}
