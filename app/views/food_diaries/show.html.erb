@@ -165,6 +165,7 @@
 
       $('.current-plate').removeClass('current-plate').addClass('hidden');
       $('bplate').append('<div class="food-goes-here" id="'+ id +'"></div>');
+      $('bplate').append('<div class="food-goes-here current-plate" id="'+ id +'"></div>');
 
       var html = '<div class="plate-detail current-plate-details" id="'+ id +'">' +
           '<h4>Meal #'+ (id+1) +'</h4>' +
