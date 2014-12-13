@@ -3,6 +3,8 @@ Rails.application.routes.draw do
 
   get 'search/index'
   get 'search/query'
+  get 'search/query_participant'
+  get 'search/check_participant' => 'search#check_participant'
 
   root to: 'visitors#index'
   devise_for :users

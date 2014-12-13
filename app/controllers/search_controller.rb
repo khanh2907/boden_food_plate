@@ -21,4 +21,35 @@ class SearchController < ApplicationController
       end
     end
   end
+
+  def query_participant
+    search = Participant.search do
+      fulltext params[:q]
+    end
+
+    respond_to do |format|
+      format.json do
+        results = search.results.map do |p|
+          { pid: p.pid, date_of_birth: p.date_of_birth, gender: p.gender }
+        end
+        render json: results
+      end
+    end
+  end
+
+  def check_participant
+    participant = Participant.find_by_pid(params[:pid])
+
+    respond_to do |format|
+      format.json do
+        if participant.nil?
+          results = {exists: false}
+        else
+          results = {exists: true, pid: participant.pid, date_of_birth: participant.date_of_birth, gender: participant.gender}
+        end
+        render json: results
+      end
+    end
+
+  end
 end
