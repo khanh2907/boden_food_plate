@@ -1,4 +1,65 @@
-<p id="notice"><%= notice %></p>
+<div class="col-md-3 food-search-bar">
+  <h3>Foods</h3>
+  <div class="foods">
+    <table class="table table-striped" id="foods-table">
+      <thead>
+      <th></th>
+      <th>Name</th>
+      </thead>
+      <tbody>
+      <% Food.all.each do |food| %>
+        <tr>
+          <td><img src="/avatar.png" height="50" id="<%= food.id %>" class="draggable"/></td>
+          <td><%= food.name %></td>
+        </tr>
+      <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>
 
-<%= link_to 'Edit', edit_food_diary_path(@food_diary) %> |
-<%= link_to 'Back', food_diaries_path %>
+<div class="col-md-9">
+  <div class="droppable"> drop here</div>
+</div>
+
+<script>
+  // Initialise the user table
+  var $table = $('#foods-table').dataTable({
+    iDisplayLength: 7,
+    bLengthChange: false,
+    pagingType: 'simple'
+  });
+
+  $('.col-xs-6').first().remove();
+
+  $table.$('tr').each(function(index) {
+    setDrag($(this).find('.draggable'));
+  })
+
+//
+//  $('#foods-table').on( 'page.dt', function (e) {
+//    e.preventDefault()
+//    setDrag();
+//  } );
+
+  function setDrag(obj) {
+    obj.draggable({
+      revert : function(event, ui) {
+        // on older version of jQuery use "draggable"
+        // $(this).data("draggable")
+        // on 2.x versions of jQuery use "ui-draggable"
+        // $(this).data("ui-draggable")
+        $(this).data("uiDraggable").originalPosition = {
+          top : 0,
+          left : 0
+        };
+        // return boolean
+        return !event;
+        // that evaluate like this:
+        // return event !== false ? false : true;
+      }
+    });
+  }
+
+  $(".droppable").droppable();
+</script>

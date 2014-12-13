@@ -12,6 +12,11 @@
 //
 //= require jquery
 //= require jquery_ujs
+//= require jquery-ui/draggable
+//= require jquery-ui/droppable
+//= require jquery-ui/widget
+//= require jquery-ui/mouse
+//= require jquery.ui.touch-punch
 //= require dataTables/jquery.dataTables
 //= require dataTables/bootstrap/3/jquery.dataTables.bootstrap
 //= require parsley
