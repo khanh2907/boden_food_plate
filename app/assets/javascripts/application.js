@@ -22,6 +22,7 @@
 //= require parsley
 //= require twitter/typeahead
 //= require select2
+//= require pace/pace
 //= require turbolinks
 //= require bootstrap-sprockets
 //= require_tree .
