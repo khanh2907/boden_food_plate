@@ -10,7 +10,7 @@
           <tbody>
           <% Food.all.each do |food| %>
             <tr>
-              <td>
+              <td data-search="<%= "#{food.name} #{food.food_category.name}" %>" data-order="<%= food.name %>">
                 <div class="draggable" data-food-id="<%= food.id %>" data-food-name="<%= food.name %>">
                   <img src="/tmp-foods/<%= (0..4).to_a.sample %>.png" height="50" id="<%= food.id %>"/>
                   <%= food.name %>
@@ -42,6 +42,7 @@
           </div>
     <div class="plate-details col-md-4 form-box">
       <h3>Day <%= @day %></h3>
+      <div class="pd-wrapper">
     <% @food_diary.meals.each_with_index do |meal, index| %>
       <div class="plate-detail <%= 'current-plate-details' if index==0 %> <%= 'hidden' unless index==0 %>" id="<%= index %>">
         <h4>Meal #<%= index+1 %></h4>
@@ -58,8 +59,6 @@
           <%end %>
           </tbody>
         </table>
-        <a class="btn btn-danger btn-lg">Empty Plate</a>
-        <a class="btn btn-danger btn-lg">Delete Meal</a>
       </div>
     <% end %>
     <% if @food_diary.meals.empty? %>
@@ -78,10 +77,13 @@
           </tr>
           </tbody>
         </table>
-        <a class="btn btn-danger btn-lg">Empty Plate</a>
-        <a class="btn btn-danger btn-lg">Delete Meal</a>
       </div>
     <% end %>
+      </div>
+      <div class="buttons">
+      <a class="btn btn-danger btn-lg" id="empty-plate-btn">Empty Plate</a>
+      <!--<a class="btn btn-danger btn-lg" id="delete-meal-btn">Delete Meal</a>-->
+      </div>
     </div>
     <div>
 
@@ -115,9 +117,6 @@
 <script>
   // Initialise the food table
   var $table = $('#foods-table').dataTable({
-    "aoColumnDefs": [
-      { 'bSortable': false, 'aTargets': [ 0 ] }
-    ],
     iDisplayLength: 7,
     bLengthChange: false,
     pagingType: 'simple',
@@ -146,8 +145,8 @@
         var foodId = $(ui.draggable).data('food-id');
         var foodName = $(ui.draggable).data('food-name');
 
-        var trHtml = '<tr data-food-id="'+ foodId +'"><td>' + foodName + '</td></tr>';
-        $('.delete-after-first').remove();
+        var trHtml = '<tr class="food" data-food-id="'+ foodId +'"><td>' + foodName + '</td></tr>';
+        $('.delete-after-first').hide();
         $('.current-plate-details').find('tbody').append(trHtml);
 
       }
@@ -182,12 +181,10 @@
           '</tr>' +
           '</tbody>' +
           '</table>' +
-          '<a class="btn btn-danger btn-lg">Empty Plate</a>' +
-          '<a class="btn btn-danger btn-lg">Delete Meal</a>' +
           '</div>'
 
       $('.current-plate-details').removeClass('current-plate-details').addClass('hidden');
-      $('.plate-details').append(html);
+      $('.pd-wrapper').append(html);
       applyPlateOnClick();
     });
 
@@ -210,8 +207,13 @@
       $('plate[id='+ id +']').addClass('strobe');
       $('.plate-detail[id='+ id +']').removeClass('hidden').addClass('current-plate-details');
       $('.food-goes-here[id='+ id +']').removeClass('hidden').addClass('current-plate');
-
     }
+
+    $('#empty-plate-btn').on('click', function(e) {
+      $('.current-plate').html('');
+      $('.current-plate-details').find('tr.food').remove();
+      $('.delete-after-first').show();
+    });
   });
 
 </script>
