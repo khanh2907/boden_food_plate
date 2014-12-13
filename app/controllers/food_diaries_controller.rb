@@ -1,6 +1,6 @@
 class FoodDiariesController < ApplicationController
   before_filter :authenticate_user!
-  before_action :set_food_diary, only: [:show, :edit, :update, :destroy]
+  before_action :set_food_diary, only: [:show, :edit, :update, :destroy, :day]
 
   respond_to :html
 
@@ -10,6 +10,16 @@ class FoodDiariesController < ApplicationController
   end
 
   def show
+    respond_with(@food_diary)
+  end
+
+  def day
+    @day = params[:day]
+    @meals = @food_diary.meals.where(@day)
+    render :show
+  end
+
+  def breakdown
     respond_with(@food_diary)
   end
 
@@ -33,6 +43,7 @@ class FoodDiariesController < ApplicationController
 
     @food_diary.participant = participant
     @food_diary.save
+    @food_diary.diary_days.create(day:1)
     respond_with(@food_diary)
   end
 

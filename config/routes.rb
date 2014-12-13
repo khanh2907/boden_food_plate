@@ -1,6 +1,8 @@
 Rails.application.routes.draw do
   resources :food_diaries
 
+  get 'food_diaries/:id/:day' => 'food_diaries#day'
+
   get 'search/index'
   get 'search/query'
   get 'search/query_participant'
