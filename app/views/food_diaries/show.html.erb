@@ -43,46 +43,44 @@
     <div class="plate-details col-md-4 form-box">
       <h3>Day <%= @day %></h3>
       <div class="pd-wrapper">
-    <% @food_diary.meals.each_with_index do |meal, index| %>
-      <div class="plate-detail <%= 'current-plate-details' if index==0 %> <%= 'hidden' unless index==0 %>" id="<%= index %>">
-        <h4>Meal #<%= index+1 %></h4>
-        <input class="form-control" placeholder="Meal Name" value="<%= meal.name %>"></input>
-        <table class="table tableSection">
-          <thead>
-          <th>Food</th>
-          </thead>
-          <tbody>
-          <% meal.foods.each do |food| %>
-            <tr>
-              <td><%= food.name %></td>
-            </tr>
-          <%end %>
-          </tbody>
-        </table>
-      </div>
-    <% end %>
-    <% if @food_diary.meals.empty? %>
-      <div class="plate-detail current-plate-details" id="0">
-        <h4>Meal #1</h4>
-        <input class="form-control" placeholder="Meal Name"></input>
-        <table class="table tableSection">
-          <thead>
-          <th>Food</th>
-          </thead>
-          <tbody>
-          <tr class="delete-after-first">
-            <td>
-            Nothing has been added yet. You can add food to this meal by dragging and dropping from the search bar.
-            </td>
-          </tr>
-          </tbody>
-        </table>
-      </div>
-    <% end %>
+        <% @food_diary.meals.each_with_index do |meal, index| %>
+          <div class="plate-detail <%= 'current-plate-details' if index==0 %> <%= 'hidden' unless index==0 %>" id="<%= index %>">
+            <input class="form-control" placeholder="Meal Name" value="<%= meal.name %>"></input>
+            <table class="table tableSection">
+              <thead>
+              <th>Food</th>
+              </thead>
+              <tbody>
+              <% meal.foods.each do |food| %>
+                <tr>
+                  <td><%= food.name %></td>
+                </tr>
+              <%end %>
+              </tbody>
+            </table>
+          </div>
+        <% end %>
+        <% if @food_diary.meals.empty? %>
+          <div class="plate-detail current-plate-details" id="0">
+            <input class="form-control" placeholder="Meal Name" value="Meal #1"></input>
+            <table class="table tableSection">
+              <thead>
+              <th>Food</th>
+              </thead>
+              <tbody>
+              <tr class="delete-after-first">
+                <td>
+                  Nothing has been added yet. You can add food to this meal by dragging and dropping from the search bar.
+                </td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        <% end %>
       </div>
       <div class="buttons">
-      <a class="btn btn-danger btn-lg" id="empty-plate-btn">Empty Plate</a>
-      <!--<a class="btn btn-danger btn-lg" id="delete-meal-btn">Delete Meal</a>-->
+        <a class="btn btn-danger btn-lg" id="empty-plate-btn">Empty Plate</a>
+        <!--<a class="btn btn-danger btn-lg" id="delete-meal-btn">Delete Meal</a>-->
       </div>
     </div>
     <div>
@@ -127,6 +125,9 @@
   });
 
   $('.col-xs-6').first().remove();
+  var trashHtml = '<div class="col-xs-6"><div class="trash" data-toggle="tooltip" data-placement="left" title="Drag and drop food here to remove it from a plate."><i class="fa fa-trash"></div></div>'
+  $('.col-xs-6').first().after(trashHtml)
+  $('[data-toggle="tooltip"]').tooltip()
 
   $(window).load(function(){
 
@@ -145,14 +146,40 @@
     $(".droppable").droppable({
       accept: '.draggable',
       drop: function(event, ui) {
-        $('.current-plate').append($(ui.draggable).clone().find('img').attr('height', '75'));
         var foodId = $(ui.draggable).data('food-id');
         var foodName = $(ui.draggable).data('food-name');
+        $('.current-plate').append($(ui.draggable).clone()
+            .find('img').attr('height', '75')
+            .addClass('food-on-plate')
+            .attr('data-toggle', 'tooltip')
+            .attr('data-placement', 'top')
+            .attr('title', foodName));
 
         var trHtml = '<tr class="food" data-food-id="'+ foodId +'"><td>' + foodName + '</td></tr>';
         $('.delete-after-first').hide();
         $('.current-plate-details').find('tbody').append(trHtml);
         updateFoodCounter();
+        $('[data-toggle="tooltip"]').tooltip()
+
+        $('.food-on-plate').draggable({
+          revert: "invalid",
+          cursor: 'move'
+        })
+      }
+    });
+
+    $(".trash").droppable({
+      accept: '.food-on-plate',
+      drop: function(event, ui) {
+        var foodId = $(ui.draggable).attr('id');
+        $(ui.draggable).remove();
+        $('.current-plate-details tr.food[data-food-id='+ foodId +']').first().remove();
+        if ($('.current-plate-details tr.food').length < 1) {
+          $('.delete-after-first').show();
+        }
+        updateFoodCounter();
+
+        $('.tooltip.in').hide();
       }
     });
 
@@ -171,8 +198,7 @@
       $('bplate').append('<div class="food-goes-here current-plate" id="'+ id +'"></div>');
 
       var html = '<div class="plate-detail current-plate-details" id="'+ id +'">' +
-          '<h4>Meal #'+ (id+1) +'</h4>' +
-          '<input class="form-control" placeholder="Meal Name"></input>' +
+          '<input class="form-control" placeholder="Meal Name" value="Meal #'+ (id+1) + '"></input>' +
           '<table class="table tableSection">' +
           '<thead>' +
           '<th>Food</th>' +

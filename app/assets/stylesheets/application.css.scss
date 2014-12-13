@@ -316,6 +316,7 @@ bplate {
 
 .plate-details {
   height: 500px;
+  margin-top: 0 !important;
 }
 
 .food-goes-here {
@@ -324,7 +325,15 @@ bplate {
   position: absolute;
   height: 350px;
   width: 350px;
-  z-index: 99999;
+  z-index: 9999999;
+}
+
+.food-on-plate {
+  z-index: 99999999;
+}
+
+.col-md-6 {
+  z-index: 0;
 }
 
 .hidden {
@@ -366,4 +375,12 @@ table.tableSection th, table.tableSection td {
   left: calc(50% - 5px);
   top: calc(50% - 10px);
   position: absolute;
+}
+
+.trash {
+  height: 5em;
+  float: right
+}
+.trash i {
+  font-size: 5em;
 }
