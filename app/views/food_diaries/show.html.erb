@@ -25,7 +25,16 @@
   </div>
 
   <div class="col-md-9 plates-div" style="display:none;">
-    <div class="row">
+    <div class="col-md-8 col-md-offset-2 no-plates-div" style="display:none;">
+      <div class="form-box text-center">
+        <h2>Uh oh! You have no plates!</h2>
+        <a class="btn btn-primary btn-lg" id="new-meal-btn">New Meal</a>
+        <br>
+        <h4>Click this button to create a new meal.</h4>
+        <a></a>
+      </div>
+    </div>
+    <div class="row p-row">
       <div class="col-md-6">
         <bplate class="droppable">
           <% @food_diary.meals.each_with_index do |meal, index| %>
@@ -40,7 +49,7 @@
           <% end %>
           </bplate>
           </div>
-    <div class="plate-details col-md-4 form-box">
+    <div class="plate-details col-md-5 form-box">
       <h3>Day <%= @day %></h3>
       <div class="pd-wrapper">
         <% @food_diary.meals.each_with_index do |meal, index| %>
@@ -78,9 +87,9 @@
           </div>
         <% end %>
       </div>
-      <div class="buttons">
-        <a class="btn btn-danger btn-lg" id="empty-plate-btn">Empty Plate</a>
-        <!--<a class="btn btn-danger btn-lg" id="delete-meal-btn">Delete Meal</a>-->
+      <div class="buttons text-center">
+        <a class="btn btn-warning btn-lg" id="empty-plate-btn">Empty Plate</a>
+        <a class="btn btn-danger btn-lg" id="delete-meal-btn">Delete Meal</a>
       </div>
     </div>
     <div>
@@ -130,6 +139,8 @@
   $('[data-toggle="tooltip"]').tooltip()
 
   $(window).load(function(){
+
+    var plateCounter = $('.plate-detail').length;
 
     $table.$('tr').each(function(index) {
       setDrag($(this).find('.draggable'));
@@ -190,7 +201,7 @@
     applyPlateOnClick();
 
     $('#new-meal-btn').on('click', function(e) {
-      var id = $('plate').length;
+      var id = plateCounter;
       $('.strobe').removeClass('strobe');
       $('.plates').append('<plate id="'+ id +'" class="strobe"><div class="food-counter">0</div></plate>');
 
@@ -216,6 +227,10 @@
       $('.current-plate-details').removeClass('current-plate-details').addClass('hidden');
       $('.pd-wrapper').append(html);
       applyPlateOnClick();
+      plateCounter++;
+
+      $('.no-plates-div').hide();
+      $('.p-row').show();
     });
 
     function applyPlateOnClick() {
@@ -239,11 +254,33 @@
       $('.food-goes-here[id='+ id +']').removeClass('hidden').addClass('current-plate');
     }
 
+//    EMPTY PLATE BUTTON
     $('#empty-plate-btn').on('click', function(e) {
-      $('.current-plate').html('');
-      $('.current-plate-details').find('tr.food').remove();
-      $('.delete-after-first').show();
-      updateFoodCounter();
+      var result = confirm("Are you sure you want to empty this plate?");
+      if (result==true) {
+        $('.current-plate').html('');
+        $('.current-plate-details').find('tr.food').remove();
+        $('.delete-after-first').show();
+        updateFoodCounter();
+      }
+    });
+
+//    DELETE MEAL BUTTON
+    $('#delete-meal-btn').on('click', function(e) {
+
+      var result = confirm("Are you sure you want to delete this meal?");
+      if (result==true) {
+        $('.current-plate').remove();
+        $('.current-plate-details').remove();
+        $('.strobe').remove();
+        var lastId = $('.plate-detail').last().attr('id')
+        togglePlates(lastId);
+
+        if ($('.plate-detail').length < 1) {
+          $('.p-row').hide();
+          $('.no-plates-div').show();
+        }
+      }
     });
 
     function updateFoodCounter() {
