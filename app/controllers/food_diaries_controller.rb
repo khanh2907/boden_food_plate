@@ -90,8 +90,7 @@ class FoodDiariesController < ApplicationController
 
     @food_diary.participant = participant
     @food_diary.save
-    @food_diary.diary_days.create(day:1)
-    respond_with(@food_diary)
+    redirect_to "#{food_diary_path(@food_diary)}/1"
   end
 
   def update
