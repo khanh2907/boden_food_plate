@@ -10,10 +10,17 @@
   </head>
   <body>
     <header>
+      <% unless @hide_nav %>
       <%= render 'layouts/navigation' %>
+      <% else %>
+        <div style="padding-top: 50px;"></div>
+      <% end %>
     </header>
+
     <main role="main">
+      <% unless @hide_nav %>
        <%= render 'layouts/messages' %>
+      <% end %>
        <%= yield %>
     </main>
   </body>

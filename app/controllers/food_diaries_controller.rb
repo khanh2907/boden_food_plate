@@ -10,16 +10,19 @@ class FoodDiariesController < ApplicationController
   end
 
   def show
+    @hide_nav = true
     @meals = @food_diary.meals.where(day: @day.to_i)
   end
 
   def day
+    @hide_nav = true
     @day = params[:day]
     @meals = @food_diary.meals.where(day: @day.to_i)
     render :show
   end
 
   def next_day
+    @hide_nav = true
     meals_json = JSON.parse(params[:meals_json])
 
     Meal.delete_all("food_diary_id = #{@food_diary.id} AND day = #{params[:day].to_i}")
