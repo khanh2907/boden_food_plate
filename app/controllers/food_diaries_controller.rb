@@ -68,6 +68,59 @@ class FoodDiariesController < ApplicationController
       ON f.id=s.food_id GROUP by s.meal_id
     """
     @meal_totals = ActiveRecord::Base.connection.exec_query(sql).to_hash
+
+    @day_totals = []
+
+    @overall_total = {:total_energy => 0,
+                      :total_energy_c => 0,
+                      :total_protein => 0,
+                      :total_total_fat => 0,
+                      :total_saturated_fat => 0,
+                      :total_cholesterol => 0,
+                      :total_carbohydrate => 0,
+                      :total_sugars => 0,
+                      :total_dietary_fibre => 0,
+                      :total_sodium => 0
+    }
+
+    @days.each do |day|
+      day_total = {:total_energy => 0,
+                   :total_energy_c => 0,
+                   :total_protein => 0,
+                   :total_total_fat => 0,
+                   :total_saturated_fat => 0,
+                   :total_cholesterol => 0,
+                   :total_carbohydrate => 0,
+                   :total_sugars => 0,
+                   :total_dietary_fibre => 0,
+                   :total_sodium => 0
+      }
+        day.pluck(:id).each do |id|
+          meal_total = @meal_totals.select {|m| m["meal_id"] == "#{id}"}.first
+          day_total[:total_energy] += meal_total['total_energy'].to_f
+          day_total[:total_energy_c] += meal_total['total_energy_c'].to_f
+          day_total[:total_protein] += meal_total['total_protein'].to_f
+          day_total[:total_total_fat] += meal_total['total_total_fat'].to_f
+          day_total[:total_saturated_fat] += meal_total['total_saturated_fat'].to_f
+          day_total[:total_cholesterol] += meal_total['total_cholesterol'].to_f
+          day_total[:total_carbohydrate] += meal_total['total_carbohydrate'].to_f
+          day_total[:total_sugars] += meal_total['total_sugars'].to_f
+          day_total[:total_dietary_fibre] += meal_total['total_dietary_fibre'].to_f
+          day_total[:total_sodium] += meal_total['total_sodium'].to_f
+
+          @overall_total[:total_energy] += meal_total['total_energy'].to_f
+          @overall_total[:total_energy_c] += meal_total['total_energy_c'].to_f
+          @overall_total[:total_protein] += meal_total['total_protein'].to_f
+          @overall_total[:total_total_fat] += meal_total['total_total_fat'].to_f
+          @overall_total[:total_saturated_fat] += meal_total['total_saturated_fat'].to_f
+          @overall_total[:total_cholesterol] += meal_total['total_cholesterol'].to_f
+          @overall_total[:total_carbohydrate] += meal_total['total_carbohydrate'].to_f
+          @overall_total[:total_sugars] += meal_total['total_sugars'].to_f
+          @overall_total[:total_dietary_fibre] += meal_total['total_dietary_fibre'].to_f
+          @overall_total[:total_sodium] += meal_total['total_sodium'].to_f
+        end
+      @day_totals.append(day_total)
+    end
   end
 
   def new
