@@ -271,10 +271,17 @@
     });
 
 //    Next Day Button
-    $('.next-day-btn').on('click', function() {
+    $('.next-day-btn').on('click', function(e) {
       var meals = platesToJson();
-      $('input#meals_json').val(JSON.stringify(meals));
-      return true;
+
+      if (meals.length < 1) {
+        alert('Your plates are empty! Please add food to them before proceeding.');
+        e.preventDefault();
+      }
+      else {
+        $('input#meals_json').val(JSON.stringify(meals));
+        return true;
+      }
     })
   }
 
