@@ -10,7 +10,7 @@ Rails.application.routes.draw do
   get 'search/query_participant'
   get 'search/check_participant' => 'search#check_participant'
 
-  root to: 'visitors#index'
+  root to: 'food_diaries#index'
   devise_for :users
   resources :users
 
