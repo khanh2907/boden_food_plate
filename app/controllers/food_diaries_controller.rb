@@ -43,7 +43,31 @@ class FoodDiariesController < ApplicationController
   end
 
   def breakdown
-    render :breakdown
+    @participant = @food_diary.participant
+
+    day1_meals = Meal.includes(:foods).where(food_diary_id: @food_diary.id, day: 1)
+    day2_meals = Meal.includes(:foods).where(food_diary_id: @food_diary.id, day: 2)
+    day3_meals = Meal.includes(:foods).where(food_diary_id: @food_diary.id, day: 3)
+
+    @days = [day1_meals, day2_meals, day3_meals]
+
+    sql = """
+      Select s.meal_id, SUM(energy) as total_energy,
+      ROUND(SUM(energy_c)::numeric, 2) as total_energy_c,
+      SUM(protein) as total_protein,
+      SUM(total_fat) as total_total_fat,
+      SUM(saturated_fat) as total_saturated_fat,
+      SUM(cholesterol) as total_cholesterol,
+      SUM(carbohydrate) as total_carbohydrate,
+      SUM(sugars) as total_sugars,
+      SUM(dietary_fibre) as total_dietary_fibre,
+      SUM(sodium) as total_sodium
+      from foods as f inner join
+        (SELECT food_id, meal_id FROM foods_meals where meal_id
+          IN (SELECT id from meals where food_diary_id = #{@food_diary.id})) as s
+      ON f.id=s.food_id GROUP by s.meal_id
+    """
+    @meal_totals = ActiveRecord::Base.connection.exec_query(sql).to_hash
   end
 
   def new

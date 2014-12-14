@@ -1,1 +1,147 @@
-<h2>Break Down</h2>
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <h3>Food Diary Break Down</h3>
+      <h4><%= "Visit Number: #{@food_diary.visit_number} | Date: #{@food_diary.created_at.strftime('%d/%m/%Y')}" %></h4>
+      <h5><%= "Participant: #{@participant.pid} | #{@participant.gender.capitalize} | #{@participant.date_of_birth.strftime('%d/%m/%Y')}" %></h5>
+    </div>
+  </div>
+
+  <div class="row">
+    <div role="tabpanel">
+      <ul id="myTab" class="nav nav-tabs" role="tablist">
+        <li role="presentation" class="active"><a href="#home" id="home-tab" role="tab" data-toggle="tab" aria-controls="home" aria-expanded="false">Summary</a></li>
+        <li role="presentation" class="dropdown">
+          <a href="#" id="myTabDrop1" class="dropdown-toggle" data-toggle="dropdown">Days <span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu" aria-labelledby="myTabDrop1" id="myTabDrop1-contents">
+            <li><a href="#day1" tabindex="-1" role="tab" id="day-1" data-toggle="tab" >Day 1</a></li>
+            <li><a href="#day2" tabindex="-1" role="tab" id="day-2" data-toggle="tab">Day 2</a></li>
+            <li><a href="#day3" tabindex="-1" role="tab" id="day-3" data-toggle="tab">Day 3</a></li>
+          </ul>
+        </li>
+      </ul>
+      <div id="myTabContent" class="tab-content">
+        <div role="tabpanel" class="tab-pane fade active in" id="home" aria-labelledby="home-tab">
+          <p>TODO Add graphs and stuff here</p>
+        </div>
+
+        <% @days.each_with_index do |day, index|%>
+          <div role="tabpanel" class="tab-pane fade" id="day<%= index+1 %>">
+            <h3><%= "Day #{index+1} Breakdown" %></h3>
+            <table class="table total">
+              <thead>
+              <th></th>
+              <th>Energy (kJ)</th>
+              <th>Energy (Calories)</th>
+              <th>Protein (g)</th>
+              <th>Total Fat (g)</th>
+              <th>Saturated Fat (g)</th>
+              <th>Cholesterol (mg)</th>
+              <th>Carbohydrate (g)</th>
+              <th>Sugars (g)</th>
+              <th>Dietary Fibre (g)</th>
+              <th>Sodium (mg)</th>
+              </thead>
+              <tbody>
+              <tr>
+                <% day_total = {:total_energy => 0,:total_energy_c => 0,:total_protein => 0,:total_total_fat => 0,:total_saturated_fat => 0,:total_cholesterol => 0,:total_carbohydrate => 0,:total_sugars => 0,:total_dietary_fibre => 0,:total_sodium => 0}%>
+                <% day.pluck(:id).each do |id| %>
+                  <% meal_total = @meal_totals.select {|m| m["meal_id"] == "#{id}"}.first %>
+                  <% day_total[:total_energy] += meal_total['total_energy'].to_f %>
+                  <% day_total[:total_energy_c] += meal_total['total_energy_c'].to_f %>
+                  <% day_total[:total_protein] += meal_total['total_protein'].to_f %>
+                  <% day_total[:total_total_fat] += meal_total['total_total_fat'].to_f %>
+                  <% day_total[:total_saturated_fat] += meal_total['total_saturated_fat'].to_f %>
+                  <% day_total[:total_cholesterol] += meal_total['total_cholesterol'].to_f %>
+                  <% day_total[:total_carbohydrate] += meal_total['total_carbohydrate'].to_f %>
+                  <% day_total[:total_sugars] += meal_total['total_sugars'].to_f %>
+                  <% day_total[:total_dietary_fibre] += meal_total['total_dietary_fibre'].to_f %>
+                  <% day_total[:total_sodium] += meal_total['total_sodium'].to_f %>
+                <% end %>
+                <td><strong>Day Total</strong></td>
+                <td><%= day_total[:total_energy].round(2) %></td>
+                <td><%= day_total[:total_energy_c].round(2) %></td>
+                <td><%= day_total[:total_protein].round(2) %></td>
+                <td><%= day_total[:total_total_fat].round(2) %></td>
+                <td><%= day_total[:total_saturated_fat].round(2) %></td>
+                <td><%= day_total[:total_cholesterol].round(2) %></td>
+                <td><%= day_total[:total_carbohydrate].round(2) %></td>
+                <td><%= day_total[:total_sugars].round(2) %></td>
+                <td><%= day_total[:total_dietary_fibre].round(2) %></td>
+                <td><%= day_total[:total_sodium].round(2) %></td>
+              </tr>
+              </tbody>
+            </table>
+
+            <hr>
+            <h4>Breakdown by meal</h4>
+            <% day.each do |meal|%>
+              <h4><%= meal.name %></h4>
+              <table class="table">
+                <thead>
+                <th>Food Name</th>
+                <th>Serving size</th>
+                <th>Serving weight (g)</th>
+                <th>Energy (kJ)</th>
+                <th>Energy (Calories)</th>
+                <th>Protein (g)</th>
+                <th>Total Fat (g)</th>
+                <th>Saturated Fat (g)</th>
+                <th>Cholesterol (mg)</th>
+                <th>Carbohydrate (g)</th>
+                <th>Sugars (g)</th>
+                <th>Dietary Fibre (g)</th>
+                <th>Sodium (mg)</th>
+                </thead>
+                <tbody>
+                <% meal.foods.each do |food| %>
+                  <tr>
+                    <td><%= food.name %></td>
+                    <td><%= food.serving_size %></td>
+                    <td><%= food.serving_weight %></td>
+                    <td><%= food.energy %></td>
+                    <td><%= food.energy_c.round(2) %></td>
+                    <td><%= food.protein %></td>
+                    <td><%= food.total_fat %></td>
+                    <td><%= food.saturated_fat %></td>
+                    <td><%= food.cholesterol %></td>
+                    <td><%= food.carbohydrate %></td>
+                    <td><%= food.sugars %></td>
+                    <td><%= food.dietary_fibre %></td>
+                    <td><%= food.sodium %></td>
+                  </tr>
+                <% end %>
+                <tr>
+                  <% meal_total = @meal_totals.select {|m| m["meal_id"] == "#{meal.id}"}.first %>
+                  <td><strong>Meal Total</strong></td>
+                  <td>-</td>
+                  <td>-</td>
+                  <td><%= meal_total['total_energy'] %></td>
+                  <td><%= meal_total['total_energy_c'] %></td>
+                  <td><%= meal_total['total_protein'] %></td>
+                  <td><%= meal_total['total_total_fat'] %></td>
+                  <td><%= meal_total['total_saturated_fat'] %></td>
+                  <td><%= meal_total['total_cholesterol'] %></td>
+                  <td><%= meal_total['total_carbohydrate'] %></td>
+                  <td><%= meal_total['total_sugars'] %></td>
+                  <td><%= meal_total['total_dietary_fibre'] %></td>
+                  <td><%= meal_total['total_sodium'] %></td>
+                </tr>
+                </tbody>
+              </table>
+              <hr>
+            <% end %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+
+
+
+
+
+
+
+
+</div>
