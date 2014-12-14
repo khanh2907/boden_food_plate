@@ -1,7 +1,9 @@
 Rails.application.routes.draw do
   resources :food_diaries
 
-  get 'food_diaries/:id/:day' => 'food_diaries#day'
+  get 'food_diaries/:id/:day' => 'food_diaries#day', :as => 'fd_day'
+  post 'food_diaries/:id/:day' => 'food_diaries#next_day', :as => 'next_day'
+  get 'breakdown/:id/' => 'food_diaries#breakdown', :as => 'food_diary_breakdown'
 
   get 'search/index'
   get 'search/query'

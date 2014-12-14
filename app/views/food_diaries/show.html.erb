@@ -37,14 +37,14 @@
     <div class="row p-row">
       <div class="col-md-6">
         <bplate class="droppable">
-          <% @food_diary.meals.each_with_index do |meal, index| %>
-            <div class="food-goes-here <%= 'current-plate' if index==0 %> <%= 'hidden-plate' unless index==0 %>" data-meal-id="<%= meal.id %> id="<%= index %>">
+          <% @meals.each_with_index do |meal, index| %>
+            <div class="food-goes-here <%= 'current-plate' if index==0 %> <%= 'hidden' unless index==0 %>" data-meal-id="<%= meal.id %>" id="<%=index%>">
             <% meal.foods.each do |food|%>
-              <img src="/tmp-foods/<%= (0..4).to_a.sample %>.png" height="75" id="<%= food.id %>"/>
+              <img src="/tmp-foods/<%= (0..4).to_a.sample %>.png" class="food-on-plate" height="75" id="<%= food.id %>" data-toggle="tooltip" data-placement="top" title="<%= food.name %>"/>
             <% end %>
             </div>
           <% end %>
-          <% if @food_diary.meals.empty? %>
+          <% if @meals.empty? %>
             <div class="food-goes-here current-plate" id="0"></div>
           <% end %>
           </bplate>
@@ -52,16 +52,16 @@
     <div class="plate-details col-md-5 form-box">
       <h3>Day <%= @day %></h3>
       <div class="pd-wrapper">
-        <% @food_diary.meals.each_with_index do |meal, index| %>
-          <div class="plate-detail <%= 'current-plate-details' if index==0 %> <%= 'hidden' unless index==0 %>" id="<%= index %>">
-            <input class="form-control" placeholder="Meal Name" value="<%= meal.name %>"></input>
+        <% @meals.each_with_index do |meal, index| %>
+          <div class="plate-detail <%= 'current-plate-details' if index==0 %> <%= 'hidden' unless index==0 %>" id="<%= index %>" data-meal-id="<%= meal.id %>">
+            <input class="form-control meal-name" placeholder="Meal Name" value="<%= meal.name %>"></input>
             <table class="table tableSection">
               <thead>
               <th>Food</th>
               </thead>
               <tbody>
               <% meal.foods.each do |food| %>
-                <tr>
+                <tr class="food" data-food-id="<%= food.id %>">
                   <td><%= food.name %></td>
                 </tr>
               <%end %>
@@ -69,9 +69,9 @@
             </table>
           </div>
         <% end %>
-        <% if @food_diary.meals.empty? %>
+        <% if @meals.empty? %>
           <div class="plate-detail current-plate-details" id="0">
-            <input class="form-control" placeholder="Meal Name" value="Meal #1"></input>
+            <input class="form-control meal-name" placeholder="Meal Name" value="Meal #1"></input>
             <table class="table tableSection">
               <thead>
               <th>Food</th>
@@ -102,25 +102,32 @@
       <div class="table-wrapper" style="opacity: 1;">
         <div class="table">
           <div class="plates">
-            <% @food_diary.meals.each_with_index do |meal, index| %>
+            <% @meals.each_with_index do |meal, index| %>
               <plate data-meal-id="<%= meal.id %>" class="<%= 'strobe' if index == 0 %>" id="<%=index%>">
                 <div class="food-counter"><%= meal.foods.count %></div>
               </plate>
             <% end %>
-            <% if @food_diary.meals.empty? %>
+            <% if @meals.empty? %>
               <plate id=0 class="strobe">
                 <div class="food-counter">0</div>
               </plate>
             <% end %>
           </div>
-          <div class="pull-right">
-            <a class="btn btn-primary btn-lg new-meal-btn">New Meal</a>
-            <% if @day.to_i < 3%>
-              <a class="btn btn-success btn-lg next-day-btn">Next Day</a>
-            <% else %>
-              <a class="btn btn-success btn-lg complete-btn">Complete Food Diary</a>
+          <div class="pull-left">
+            <% if @day.to_i > 1%>
+              <a class="btn btn-danger btn-lg previous-day-btn" href="<%= "#{food_diary_path(@food_diary)}/#{@day.to_i-1}" %>">Previous Day</a>
             <% end %>
-
+          </div>
+          <div class="pull-right">
+            <%= form_tag(next_day_path(@food_diary, @day.to_i), method: 'post' ) do %>
+              <input hidden name="meals_json" id="meals_json"></input>
+              <a class="btn btn-primary btn-lg new-meal-btn">New Meal</a>
+              <% if @day.to_i < 3%>
+                <input class="btn btn-success btn-lg next-day-btn" type="submit" value="Next Day">
+              <% else %>
+                <input class="btn btn-success btn-lg next-day-btn" type="submit" value="Complete Food Diary">
+              <% end %>
+            <% end %>
           </div>
         </div>
         <div class="table-edge" style="opacity: 1;">
@@ -131,6 +138,9 @@
 </div>
 </div>
 <script>
+
+  var hasLoaded = false;
+
   // Initialise the food table
   var $table = $('#foods-table').dataTable({
     iDisplayLength: 7,
@@ -143,7 +153,9 @@
   $('.col-xs-6').first().after(trashHtml)
   $('[data-toggle="tooltip"]').tooltip()
 
-  $(window).load(function(){
+  onLoadDo();
+
+  function onLoadDo() {
 
     var plateCounter = $('.plate-detail').length;
 
@@ -151,13 +163,7 @@
       setDrag($(this).find('.draggable'));
     })
 
-    function setDrag(obj) {
-      obj.draggable({
-        revert: "invalid",
-        helper: "clone",
-        cursor: "move"
-      });
-    }
+    setFoodOnPlateDraggable();
 
     $(".droppable").droppable({
       accept: '.draggable',
@@ -177,10 +183,7 @@
         updateFoodCounter();
         $('[data-toggle="tooltip"]').tooltip()
 
-        $('.food-on-plate').draggable({
-          revert: "invalid",
-          cursor: 'move'
-        })
+        setFoodOnPlateDraggable();
       }
     });
 
@@ -199,9 +202,9 @@
       }
     });
 
-    $('.plates-div').toggle( "slide", {direction: 'right', complete: function () {console.log('test')}}, 700);
+    $('.plates-div').toggle( "slide", {direction: 'updown'}, 500);
 
-    $('.food-search-bar').toggle( "slide", {direction: 'left', complete: function () {console.log('test')}}, 700);
+    $('.food-search-bar').toggle( "slide", {direction: 'left'}, 500);
 
     applyPlateOnClick();
 
@@ -214,7 +217,7 @@
       $('bplate').append('<div class="food-goes-here current-plate" id="'+ id +'"></div>');
 
       var html = '<div class="plate-detail current-plate-details" id="'+ id +'">' +
-          '<input class="form-control" placeholder="Meal Name" value="Meal #'+ (id+1) + '"></input>' +
+          '<input class="form-control meal-name" placeholder="Meal Name" value="Meal #'+ (id+1) + '"></input>' +
           '<table class="table tableSection">' +
           '<thead>' +
           '<th>Food</th>' +
@@ -237,27 +240,6 @@
       $('.no-plates-div').hide();
       $('.p-row').show();
     });
-
-    function applyPlateOnClick() {
-      $('plate').on('click', function(e) {
-        if ($(this).hasClass('strobe')) {
-          return;
-        }
-        else {
-          togglePlates($(this).attr('id'));
-        }
-      })
-    }
-
-    function togglePlates(id) {
-      $('.strobe').removeClass('strobe')
-      $('.current-plate-details').removeClass('current-plate-details').addClass('hidden');
-      $('.current-plate').removeClass('current-plate').addClass('hidden');
-
-      $('plate[id='+ id +']').addClass('strobe');
-      $('.plate-detail[id='+ id +']').removeClass('hidden').addClass('current-plate-details');
-      $('.food-goes-here[id='+ id +']').removeClass('hidden').addClass('current-plate');
-    }
 
 //    EMPTY PLATE BUTTON
     $('#empty-plate-btn').on('click', function(e) {
@@ -288,10 +270,90 @@
       }
     });
 
-    function updateFoodCounter() {
-      var foodCounter = $('.strobe .food-counter');
-      foodCounter.html($('.current-plate').find('img').length);
-    }
-  });
+//    Next Day Button
+    $('.next-day-btn').on('click', function() {
+      var meals = platesToJson();
+      $('input#meals_json').val(JSON.stringify(meals));
+      return true;
+    })
+  }
 
+  function checkLoaded() {
+    if (!hasLoaded) {
+      onLoadDo();
+      hasLoaded = true;
+    }
+  }
+
+  function platesToJson() {
+    var plates = [];
+    $('.plate-detail').each(function(index) {
+
+      if ($(this).find('tr.food').length < 1) {
+        return true;
+      }
+
+      var json = {};
+      var mealId = $(this).data('meal-id');
+
+      if (typeof mealId !== 'undefined') {
+        json.meal_id = mealId;
+      }
+
+      var foods = []
+
+      $(this).find('tr.food').each(function() {
+        foods.push($(this).data('food-id'));
+      })
+
+      json.name = $(this).find('input.meal-name').val();
+      json.foods = foods;
+      json.day = <%= @day %>;
+      json.food_diary_id = <%= @food_diary.id %>;
+
+      plates.push(json);
+    })
+    return plates;
+  }
+
+  function setDrag(obj) {
+    obj.draggable({
+      revert: "invalid",
+      helper: "clone",
+      cursor: "move"
+    });
+  }
+
+  function setFoodOnPlateDraggable() {
+    $('.food-on-plate').draggable({
+      revert: "invalid",
+      cursor: 'move'
+    });
+  }
+
+  function applyPlateOnClick() {
+    $('plate').on('click', function(e) {
+      if ($(this).hasClass('strobe')) {
+        return;
+      }
+      else {
+        togglePlates($(this).attr('id'));
+      }
+    })
+  }
+
+  function togglePlates(id) {
+    $('.strobe').removeClass('strobe')
+    $('.current-plate-details').removeClass('current-plate-details').addClass('hidden');
+    $('.current-plate').removeClass('current-plate').addClass('hidden');
+
+    $('plate[id='+ id +']').addClass('strobe');
+    $('.plate-detail[id='+ id +']').removeClass('hidden').addClass('current-plate-details');
+    $('.food-goes-here[id='+ id +']').removeClass('hidden').addClass('current-plate');
+  }
+
+  function updateFoodCounter() {
+    var foodCounter = $('.strobe .food-counter');
+    foodCounter.html($('.current-plate').find('img').length);
+  }
 </script>

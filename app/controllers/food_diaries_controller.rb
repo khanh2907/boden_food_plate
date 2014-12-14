@@ -1,6 +1,6 @@
 class FoodDiariesController < ApplicationController
   before_filter :authenticate_user!
-  before_action :set_food_diary, only: [:show, :edit, :update, :destroy, :day]
+  before_action :set_food_diary, only: [:show, :edit, :update, :destroy, :day, :next_day, :breakdown]
 
   respond_to :html
 
@@ -10,17 +10,40 @@ class FoodDiariesController < ApplicationController
   end
 
   def show
-    respond_with(@food_diary)
+    @meals = @food_diary.meals.where(day: @day.to_i)
   end
 
   def day
     @day = params[:day]
-    @meals = @food_diary.meals.where(@day)
+    @meals = @food_diary.meals.where(day: @day.to_i)
     render :show
   end
 
+  def next_day
+    meals_json = JSON.parse(params[:meals_json])
+
+    Meal.delete_all("food_diary_id = #{@food_diary.id} AND day = #{params[:day].to_i}")
+
+    meals_json.each do |meal_json|
+      meal = Meal.new(name: meal_json["name"], day: meal_json["day"], food_diary_id: meal_json["food_diary_id"])
+      meal_json["foods"].each do |food_id|
+      food = Food.find(food_id)
+      meal.foods << food unless food.nil?
+      meal.save!
+      end
+    end
+
+    next_day = params[:day].to_i + 1
+
+    if next_day > 3
+      redirect_to food_diary_breakdown_path(@food_diary)
+    else
+      redirect_to fd_day_path(@food_diary, next_day)
+    end
+  end
+
   def breakdown
-    respond_with(@food_diary)
+    render :breakdown
   end
 
   def new
