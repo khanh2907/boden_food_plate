@@ -46,6 +46,10 @@
           <% end %>
           <% if @meals.empty? %>
             <div class="food-goes-here current-plate" id="0"></div>
+            <div class="food-goes-here" id="1"></div>
+            <div class="food-goes-here" id="2"></div>
+            <div class="food-goes-here" id="3"></div>
+            <div class="food-goes-here" id="4"></div>
           <% end %>
           </bplate>
           </div>
@@ -75,8 +79,9 @@
           </div>
         <% end %>
         <% if @meals.empty? %>
-          <div class="plate-detail current-plate-details" id="0">
-            <input class="form-control meal-name" placeholder="Meal Name" value="Meal #1"></input>
+          <% @default_plates.each_with_index do |name, index| %>
+          <div class="plate-detail <%= 'current-plate-details' if index==0 %> <%= 'hidden' unless index==0 %>" id="<%= index %>">
+            <input class="form-control meal-name" placeholder="Meal Name" value="<%= name %>"></input>
             <table class="table tableSection">
               <thead>
               <th>Food</th>
@@ -90,6 +95,7 @@
               </tbody>
             </table>
           </div>
+          <% end %>
         <% end %>
       </div>
       <div class="buttons text-center">
@@ -110,12 +116,16 @@
             <% @meals.each_with_index do |meal, index| %>
               <plate data-meal-id="<%= meal.id %>" class="<%= 'strobe' if index == 0 %>" id="<%=index%>">
                 <div class="food-counter"><%= meal.foods.count %></div>
+                <div class="food-label"><span class="label label-<%= meal_label_color(meal.name) %>"><%= meal.name %></span></div>
               </plate>
             <% end %>
             <% if @meals.empty? %>
-              <plate id=0 class="strobe">
+              <% @default_plates.each_with_index do |name, index| %>
+              <plate id="<%= index %>" class="<%= 'strobe' if index==0 %>">
                 <div class="food-counter">0</div>
+                <div class="food-label"><span class="label label-<%= meal_label_color(name) %>"><%= name %></span></div>
               </plate>
+              <% end %>
             <% end %>
           </div>
           <div class="pull-left">
@@ -207,7 +217,7 @@
       }
     });
 
-    $('.plates-div').toggle( "slide", {direction: 'updown'}, 500);
+    $('.plates-div').toggle( "slide", {direction: 'right'}, 500);
 
     $('.food-search-bar').toggle( "slide", {direction: 'left'}, 500);
 
@@ -216,7 +226,7 @@
     $('.new-meal-btn').on('click', function(e) {
       var id = plateCounter;
       $('.strobe').removeClass('strobe');
-      $('.plates').append('<plate id="'+ id +'" class="strobe"><div class="food-counter">0</div></plate>');
+      $('.plates').append('<plate id="'+ id +'" class="strobe"><div class="food-counter">0</div><div class="food-label"><span class="label label-default">Meal #'+ (id+1) + '</span></div></plate>');
 
       $('.current-plate').removeClass('current-plate').addClass('hidden');
       $('bplate').append('<div class="food-goes-here current-plate" id="'+ id +'"></div>');

@@ -18,6 +18,7 @@ class FoodDiariesController < ApplicationController
     @hide_nav = true
     @day = params[:day]
     @meals = @food_diary.meals.where(day: @day.to_i)
+    @default_plates = ['Breakfast', 'Snack', 'Lunch', 'Snack', 'Dinner']
     render :show
   end
 
