@@ -60,6 +60,11 @@
               <th>Food</th>
               </thead>
               <tbody>
+              <tr class="delete-after-first" style="display:none;">
+                <td>
+                  Nothing has been added yet. You can add food to this meal by dragging and dropping from the search bar.
+                </td>
+              </tr>
               <% meal.foods.each do |food| %>
                 <tr class="food" data-food-id="<%= food.id %>">
                   <td><%= food.name %></td>
