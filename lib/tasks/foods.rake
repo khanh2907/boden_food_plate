@@ -9,7 +9,7 @@ namespace :foods do
     FoodCategory.delete_all
     puts "Food Categories and Foods deleted."
 
-    food_db_file = Rails.root.join('lib', 'assets', 'food_database.xlsx').to_s
+    food_db_file = Rails.root.join('public', 'food_images', 'food_db.xlsx').to_s
     puts "Ingesting Foods from: #{food_db_file}"
 
     xls = Roo::Spreadsheet.open(food_db_file)
@@ -36,6 +36,8 @@ namespace :foods do
         food.sugars = food_hash["Sugars (g)"]          unless food_hash["Sugars (g)"].nil?
         food.dietary_fibre = food_hash["Dietary Fibre (g)"]   unless food_hash["Dietary Fibre (g)"].nil?
         food.sodium = food_hash["Sodium (mg)"]         unless food_hash["Sodium (mg)"].nil?
+        food.image_path = "/food_images/#{food_hash['Food Images']}" unless food_hash["Food Images"].nil?
+        food.swap_tip = food_hash["Swapping Tips"] unless food_hash["Swapping Tips"].nil?
         food.save!
         food_count += 1
       end
