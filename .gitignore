@@ -21,6 +21,9 @@ db/*.sqlite3
 /log/*
 /tmp/*
 
+# food pictures
+/public/food_images
+
 # various artifacts
 **.war
 *.rbc

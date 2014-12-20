@@ -2,6 +2,16 @@
   <input class="typeahead" type="text" placeholder="Articles">
 </div>
 
+
+<% FoodCategory.all.each do |fc| %>
+  <h4><%= fc.name %></h4>
+  <ul>
+  <% fc.foods.each do |f| %>
+    <li><%= f.name %></li>
+  <% end %>
+  </ul>
+<% end %>
+
 <script>
 
   foods = new Bloodhound({

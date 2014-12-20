@@ -1,27 +1,36 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><%= content_for?(:title) ? yield(:title) : "Electronic Food Diary" %></title>
-    <meta name="description" content="<%= content_for?(:description) ? yield(:description) : "Electronic Food Diary" %>">
-    <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track' => true %>
-    <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
-    <%= csrf_meta_tags %>
-  </head>
-  <body>
-    <header>
-      <% unless @hide_nav %>
-      <%= render 'layouts/navigation' %>
-      <% else %>
-        <div style="padding-top: 50px;"></div>
-      <% end %>
-    </header>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= content_for?(:title) ? yield(:title) : "Boden Food Plate" %></title>
+  <meta name="description" content="<%= content_for?(:description) ? yield(:description) : "Boden Food Plate" %>">
+  <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track' => true %>
+  <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+  <%= csrf_meta_tags %>
+  <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+  <link rel="icon" href="/favicon.ico" type="image/x-icon">
+</head>
+<body>
+<% unless @hide_nav %>
+  <div id="wrap">
+    <%= render 'layouts/navigation' %>
 
-    <main role="main">
-      <% unless @hide_nav %>
-       <%= render 'layouts/messages' %>
-      <% end %>
-       <%= yield %>
-    </main>
-  </body>
+    <div class="container main">
+      <%= render 'layouts/messages' %>
+      <%= yield %>
+    </div>
+    <div id="push"></div>
+  </div>
+  <div id="footer">
+    <div class="container">
+      <%= image_tag '/boden_logo.jpg', height: 60, class: 'logo' %>
+      <%= image_tag '/usyd_logo.jpg', height: 75, class: 'logo' %>
+    </div>
+  </div>
+<% else %>
+  <div style="padding-top: 20px;"></div>
+  <%= yield %>
+<% end %>
+
+</body>
 </html>
