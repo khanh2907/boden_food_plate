@@ -24,6 +24,8 @@
 //= require twitter/typeahead
 //= require select2
 //= require pace/pace
+//= require highcharts
+//= require highcharts/highcharts-more
 //= require turbolinks
 //= require bootstrap-sprockets
 //= require_tree .

@@ -28,6 +28,8 @@ gem 'progress_bar'
 gem 'twitter-typeahead-rails'
 gem 'select2-rails'
 gem 'pace-rails'
+gem 'highcharts-rails'
+
 
 group :development do
   gem 'better_errors'

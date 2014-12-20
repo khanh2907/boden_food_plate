@@ -17,6 +17,9 @@
       </ul>
       <div id="myTabContent" class="tab-content">
         <div role="tabpanel" class="tab-pane fade active in" id="home" aria-labelledby="home-tab">
+          <div id="total-energy-chart" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+          <hr>
+          <div id="ratio-energy-chart" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
           <table class="table total">
             <thead>
             <th></th>
@@ -148,4 +151,108 @@
   </div>
 </div>
 
+
+<script>
+  $(function () {
+    $('#total-energy-chart').highcharts({
+      chart: {
+        type: 'column'
+      },
+      credits: {
+        enabled: false
+      },
+      title: {
+        text: 'Total Energy Intake'
+      },
+      xAxis: {
+        type: 'category',
+        categories: [
+          'Average Australian adult for weight maintenance',
+          'My intake'
+        ],
+        labels: {
+          style: {
+            fontSize: '13px',
+            fontFamily: 'Verdana, sans-serif'
+          }
+        }
+      },
+      yAxis: {
+        min: 0,
+        title: {
+          text: 'Kilojoules (kJ)'
+        }
+      },
+      legend: {
+        enabled: false
+      },
+      series: [{
+        name: 'Total Energy',
+        data: [
+          {y: 8700},
+          {y: <%= (@overall_total[:total_energy]/3).round(2) %>, color: '<%= @overall_total[:total_energy]/3 <= 8700 ? 'yellowgreen':'#ce1126' %>'},
+        ],
+        dataLabels: {
+          format: '{point.y} kJ',
+          enabled: true,
+          color: '#FFFFFF',
+          align: 'center',
+          x: 4,
+          y: 100,
+          style: {
+            fontSize: '13px',
+            fontFamily: 'Verdana, sans-serif',
+            textShadow: '0 0 3px black'
+          }
+        }
+      }]
+    });
+  });
+
+  $(function () {
+    $('#ratio-energy-chart').highcharts({
+      chart: {
+        type: 'column'
+      },
+      title: {
+        text: 'Energy Intake per day'
+      },
+      xAxis: {
+        categories: ['Carbohydrate', 'Protein', 'Fat', 'Saturated Fat', 'Oceania'],
+      },
+      yAxis: {
+        min: 0,
+        title: {
+          text: '% total energy intake per day',
+        },
+        labels: {
+          overflow: 'justify'
+        }
+      },
+      credits: {
+        enabled: false
+      },
+      series: [{
+        name: 'Recommended minimum daily ratio',
+        data: [45, 15, 20, 0]
+      }, {
+        name: 'Recommended Maximum daily ratio',
+        data: [65, 25, 35, 10],
+        color: '#ce1126'
+      }, {
+        name: 'My intake',
+        data: [50, 20, 25, 5], //TODO: add actual values here
+        color: 'yellowgreen'
+      }],
+      plotOptions: {
+        series: {
+          dataLabels: {
+            enabled: true,
+            format: '{y}'
+          }
+        }
+      }
+    });
+  });
+</script>
 
