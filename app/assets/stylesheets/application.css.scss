@@ -482,3 +482,56 @@ table.tableSection th, table.tableSection td {
     padding-right: 20px;
   }
 }
+
+.food-wrapper ul {
+  list-style: none;
+}
+
+.food-wrapper ul li {
+  border-top: 1px;
+}
+
+.panel#vegetables .panel-heading {
+  background-color: #2ECC40;
+}
+
+.panel#fruit .panel-heading {
+  background-color: #01FF70;
+}
+.panel#meat_fish_seafood_alts .panel-heading {
+  background-color: #FF4136;
+}
+.panel#breads_cereals .panel-heading {
+  background-color: #FFDC00;
+}
+.panel#pasta_rice_grains .panel-heading {
+  background-color: #2851a5;
+}
+.panel#dairy .panel-heading {
+  background-color: #ff9292;
+}
+.panel#fats_oils .panel-heading {
+  background-color: #ff992c;
+}
+.panel#sauces_dressings_condiments .panel-heading {
+  background-color: #88e6ff;
+}
+.panel#cakes_pastries_desserts .panel-heading {
+  background-color: #F012BE;
+}
+.panel#biscuits_snacks_sweets .panel-heading {
+  background-color: #39CCCC;
+}
+.panel#beverages .panel-heading {
+  background-color: #7FDBFF;
+}
+.panel#takeaways_mixed_dishes .panel-heading {
+  background-color: #cbeeff;
+}
+.panel#homemade_recipes_home_dishes .panel-heading {
+  background-color: #AAAAAA;
+}
+.panel a {
+  color: #fff;
+  text-decoration: none;
+}

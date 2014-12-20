@@ -1,28 +1,5 @@
 <div>
-  <div class="col-md-3 food-search-bar" style="display:none;">
-    <div class="food-wrapper">
-      <h3>Foods</h3>
-      <div class="foods">
-        <table class="table table-striped" id="foods-table">
-          <thead>
-          <th>Food</th>
-          </thead>
-          <tbody>
-          <% Food.all.each do |food| %>
-            <tr>
-              <td data-search="<%= "#{food.name}" %>" data-order="<%= food.name %>">
-                <div class="draggable" data-food-id="<%= food.id %>" data-food-name="<%= food.name %>">
-                  <img src="/tmp-foods/<%= (0..4).to_a.sample %>.png" height="50" id="<%= food.id %>"/>
-                  <%= food.name %>
-                </div>
-              </td>
-            </tr>
-          <% end %>
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </div>
+  <%= render 'food_search' %>
 
   <div class="col-md-9 plates-div" style="display:none;">
     <div class="col-md-8 col-md-offset-2 no-plates-div" style="display:none;">

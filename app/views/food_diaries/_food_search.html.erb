@@ -1,0 +1,35 @@
+<div class="col-md-3 food-search-bar" style="display:none;">
+  <div class="food-wrapper">
+    <h3>Foods</h3>
+    <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+      <% FoodCategory.all.each_with_index do |fc, index| %>
+      <% food_category_id = fc.name.gsub(' ', '').gsub('&', '').gsub(',','').underscore %>
+      <div class="panel panel-default" id="<%= food_category_id %>">
+        <a data-toggle="collapse" data-parent="#accordion" href="#<%= "collapse-#{index}"%>" aria-expanded="true" aria-controls="<%= "collapse-#{index}"%>">
+        <div class="panel-heading" role="tab" id="<%= "heading-#{index}"%>">
+          <h4 class="panel-title">
+            <%= "#{fc.name} (#{fc.foods.count})" %>
+          </h4>
+        </div>
+          </a>
+        <div id="<%= "collapse-#{index}"%>" class="panel-collapse collapse" role="tabpanel" aria-labelledby="<%= "heading-#{index}"%>" data-id="<%= food_category_id %>">
+          <div class="panel-body">
+          </div>
+        </div>
+      </div>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<script>
+  $('.panel-collapse').on('show.bs.collapse', function() {
+    var fcId = $(this).data('id');
+    $(".panel:not(#"+ fcId +")").hide();
+  })
+
+  $('.panel-collapse').on('hide.bs.collapse', function() {
+    var fcId = $(this).data('id');
+    $(".panel:not(#"+ fcId +")").show();
+  })
+</script>
