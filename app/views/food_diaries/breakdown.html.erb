@@ -17,10 +17,39 @@
       </ul>
       <div id="myTabContent" class="tab-content">
         <div role="tabpanel" class="tab-pane fade active in" id="home" aria-labelledby="home-tab">
-          <div id="total-energy-chart" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
-          <hr>
-          <div id="ratio-energy-chart" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
-          <table class="table total">
+          <div class="row">
+            <div class="col-md-6">
+              <div id="total-energy-chart" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+            </div>
+            <div class="col-md-6">
+              <div id="ratio-energy-chart" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div>
+              <ul>
+                <li>
+                  Your daily total Energy intake is <%= (@overall_total[:total_energy]/3).to_i %>kJ. This is <%= (8700 - @overall_total[:total_energy]/3).to_i.abs %>kJ <%= (@overall_total[:total_energy]/3).to_i > 8700 ? 'higher':'lower' %> than the total energy intake of an average Australian adult for weight maintenance.
+                </li>
+                <li>
+                  50% of your daily total energy intake comes from Carbohydrate. Your % carbohydrate intake is within the recommended range.
+                </li>
+                <li>
+                  20% of your daily total energy intake comes from Protein. Your % protein intake is within the recommended range.
+                </li>
+                <li>
+                  25% of your daily total energy intake comes from Fat. Your % fat intake is within the recommended range.
+                </li>
+                <li>
+                  5% of your daily total energy intake comes from Saturated Fat. Your % saturated fat intake is within the recommended range.
+                </li>
+
+              </ul>
+            </div>
+          </div>
+
+          <table class="table total" hidden>
             <thead>
             <th></th>
             <th>Energy (kJ)</th>
