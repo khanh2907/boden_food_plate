@@ -46,6 +46,11 @@ class FoodDiariesController < ApplicationController
     end
   end
 
+  def search_category
+    @category = FoodCategory.find(params[:id])
+    render layout: false
+  end
+
   def breakdown
     @participant = @food_diary.participant
 

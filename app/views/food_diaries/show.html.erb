@@ -131,19 +131,10 @@
 </div>
 <script>
 
-  var hasLoaded = false;
-
-  // Initialise the food table
-  var $table = $('#foods-table').dataTable({
-    iDisplayLength: 7,
-    bLengthChange: false,
-    pagingType: 'simple',
-  });
-
-  $('.col-xs-6').first().remove();
-  var trashHtml = '<div class="col-xs-6"><div class="trash" data-toggle="tooltip" data-placement="left" title="Drag and drop food here to remove it from a plate."><i class="fa fa-trash"></div></div>'
-  $('.col-xs-6').first().after(trashHtml)
-  $('[data-toggle="tooltip"]').tooltip()
+  <!---->
+//  var trashHtml = '<div class="col-xs-6"><div class="trash" data-toggle="tooltip" data-placement="left" title="Drag and drop food here to remove it from a plate."><i class="fa fa-trash"></div></div>'
+//  $('.col-xs-6').first().after(trashHtml)
+//  $('[data-toggle="tooltip"]').tooltip()
 
   onLoadDo();
 
@@ -151,9 +142,9 @@
 
     var plateCounter = $('.plate-detail').length;
 
-    $table.$('tr').each(function(index) {
-      setDrag($(this).find('.draggable'));
-    })
+//    $table.$('tr').each(function(index) {
+//      setDrag($(this).find('.draggable'));
+//    })
 
     setFoodOnPlateDraggable();
 
@@ -275,13 +266,6 @@
         return true;
       }
     })
-  }
-
-  function checkLoaded() {
-    if (!hasLoaded) {
-      onLoadDo();
-      hasLoaded = true;
-    }
   }
 
   function platesToJson() {

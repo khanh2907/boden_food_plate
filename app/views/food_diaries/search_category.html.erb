@@ -1,0 +1,40 @@
+<table class="table" id="<%= @category.id %>">
+  <thead>
+    <th>Food</th>
+    <th></th>
+  </thead>
+  <tbody>
+    <% @category.foods.each do |food|%>
+    <tr>
+      <td>
+        <div class="draggable" data-food-id="<%= food.id %>" data-food-name="<%= food.name %>">
+          <% unless food.image_path.nil? %>
+            <img class="lazy" src="/loading-text.gif" data-src="<%= food.image_path %>" height="50"/>
+          <% else %>
+            <img src="/tmp-foods/<%= (0..4).to_a.sample %>.png" height="50" id="<%= food.id %>"/>
+          <% end %>
+          <%= food.name %>
+        </div>
+      </td>
+      <td>Add</td>
+    </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<script>
+  var table = $('table#<%= @category.id %>');
+  // Initialise the food table
+  $('table#<%= @category.id %>').dataTable({
+    iDisplayLength: 5,
+    bLengthChange: false,
+    pagingType: 'simple',
+    fnDrawCallback: function() {
+      $('table#<%= @category.id %>').find('.lazy:not(.loaded)').each(function() {
+        $(this).attr('src', $(this).data('src'));
+        $(this).addClass('loaded');
+      })
+    }
+  });
+  $('#<%= @category.id %>_wrapper').find('.col-xs-6')[0].remove()
+</script>

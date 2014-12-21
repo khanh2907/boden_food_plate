@@ -5,7 +5,7 @@
       <% FoodCategory.all.each_with_index do |fc, index| %>
       <% food_category_id = fc.name.gsub(' ', '').gsub('&', '').gsub(',','').underscore %>
       <div class="panel panel-default" id="<%= food_category_id %>">
-        <a data-toggle="collapse" data-parent="#accordion" href="#<%= "collapse-#{index}"%>" aria-expanded="true" aria-controls="<%= "collapse-#{index}"%>">
+        <a data-toggle="collapse" data-parent="#accordion" href="#<%= "collapse-#{index}"%>" aria-expanded="true" aria-controls="<%= "collapse-#{index}"%>" data-endpoint="<%= search_category_path(fc) %>" id="<%= food_category_id %>">
         <div class="panel-heading" role="tab" id="<%= "heading-#{index}"%>">
           <h4 class="panel-title">
             <%= "#{fc.name} (#{fc.foods.count})" %>
@@ -24,9 +24,23 @@
 
 <script>
   $('.panel-collapse').on('show.bs.collapse', function() {
-    var fcId = $(this).data('id');
+    var $this = $(this);
+    var fcId = $this.data('id');
     $(".panel:not(#"+ fcId +")").hide();
-  })
+
+    var fcEndpoint = $('a#'+fcId).data('endpoint');
+
+    if (!$this.hasClass('loaded')){
+      $.ajax({
+        url: fcEndpoint,
+        async: false,
+        success: function(data) {
+          $this.html(data);
+          $this.addClass('loaded');
+        }
+      })
+    }
+  });
 
   $('.panel-collapse').on('hide.bs.collapse', function() {
     var fcId = $(this).data('id');
