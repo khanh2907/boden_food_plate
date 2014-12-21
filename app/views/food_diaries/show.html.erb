@@ -167,7 +167,7 @@
             .attr('title', foodName));
 
         var trHtml = '<tr class="food" data-food-id="'+ foodId +'"><td>' + foodName + '</td></tr>';
-        $('.delete-after-first').hide();
+        $('.current-plate-details .delete-after-first').hide();
         $('.current-plate-details').find('tbody').append(trHtml);
         updateFoodCounter();
         $('[data-toggle="tooltip"]').tooltip()
@@ -183,7 +183,7 @@
         $(ui.draggable).remove();
         $('.current-plate-details tr.food[data-food-id='+ foodId +']').first().remove();
         if ($('.current-plate-details tr.food').length < 1) {
-          $('.delete-after-first').show();
+          $('.current-plate-details .delete-after-first').show();
         }
         updateFoodCounter();
 
@@ -236,7 +236,7 @@
       if (result==true) {
         $('.current-plate').html('');
         $('.current-plate-details').find('tr.food').remove();
-        $('.delete-after-first').show();
+        $('.current-plate-details .delete-after-first').show();
         updateFoodCounter();
       }
     });
