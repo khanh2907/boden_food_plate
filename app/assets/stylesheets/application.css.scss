@@ -531,7 +531,7 @@ table.tableSection th, table.tableSection td {
 .panel#homemade_recipes_home_dishes .panel-heading {
   background-color: #AAAAAA;
 }
-.panel a {
+.panel > a {
   color: #fff;
   text-decoration: none;
 }

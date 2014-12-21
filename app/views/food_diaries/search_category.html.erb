@@ -16,7 +16,9 @@
           <%= food.name %>
         </div>
       </td>
-      <td>Add</td>
+      <td>
+        <a class="btn btn-default btn-xs"><%= fa_icon 'plus' %></a>
+      </td>
     </tr>
     <% end %>
   </tbody>
@@ -26,12 +28,20 @@
   var table = $('table#<%= @category.id %>');
   // Initialise the food table
   $('table#<%= @category.id %>').dataTable({
+    "aoColumnDefs": [
+      { 'bSortable': false, 'aTargets': [ 1 ] }
+    ],
     iDisplayLength: 5,
     bLengthChange: false,
     pagingType: 'simple',
     fnDrawCallback: function() {
       $('table#<%= @category.id %>').find('.lazy:not(.loaded)').each(function() {
         $(this).attr('src', $(this).data('src'));
+        $(this).parent().draggable({
+          revert: "invalid",
+          helper: "clone",
+          cursor: "move"
+        });
         $(this).addClass('loaded');
       })
     }

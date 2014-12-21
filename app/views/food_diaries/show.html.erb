@@ -17,7 +17,11 @@
           <% @meals.each_with_index do |meal, index| %>
             <div class="food-goes-here <%= 'current-plate' if index==0 %> <%= 'hidden' unless index==0 %>" data-meal-id="<%= meal.id %>" id="<%=index%>">
             <% meal.foods.each do |food|%>
-              <img src="/tmp-foods/<%= (0..4).to_a.sample %>.png" class="food-on-plate" height="75" id="<%= food.id %>" data-toggle="tooltip" data-placement="top" title="<%= food.name %>"/>
+                <% unless food.image_path.nil? %>
+                  <img src="<%= food.image_path %>" class="food-on-plate img-circle" height="75" width="75" id="<%= food.id %>" data-toggle="tooltip" data-placement="top" title="<%= food.name %>"/>
+                <% else %>
+                  <img src="/tmp-foods/<%= (0..4).to_a.sample %>.png" class="food-on-plate" height="75" id="<%= food.id %>" data-toggle="tooltip" data-placement="top" title="<%= food.name %>"/>
+                <% end %>
             <% end %>
             </div>
           <% end %>
@@ -134,7 +138,7 @@
   <!---->
 //  var trashHtml = '<div class="col-xs-6"><div class="trash" data-toggle="tooltip" data-placement="left" title="Drag and drop food here to remove it from a plate."><i class="fa fa-trash"></div></div>'
 //  $('.col-xs-6').first().after(trashHtml)
-//  $('[data-toggle="tooltip"]').tooltip()
+  $('[data-toggle="tooltip"]').tooltip()
 
   onLoadDo();
 
@@ -154,8 +158,10 @@
         var foodId = $(ui.draggable).data('food-id');
         var foodName = $(ui.draggable).data('food-name');
         $('.current-plate').append($(ui.draggable).clone()
-            .find('img').attr('height', '75')
-            .addClass('food-on-plate')
+            .find('img')
+            .attr('height', '75')
+            .attr('width', '75')
+            .addClass('food-on-plate img-circle')
             .attr('data-toggle', 'tooltip')
             .attr('data-placement', 'top')
             .attr('title', foodName));
