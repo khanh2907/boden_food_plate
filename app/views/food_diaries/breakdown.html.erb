@@ -33,16 +33,19 @@
                   Your daily total Energy intake is <%= (@overall_total[:total_energy]/3).to_i %>kJ. This is <%= (8700 - @overall_total[:total_energy]/3).to_i.abs %>kJ <%= (@overall_total[:total_energy]/3).to_i > 8700 ? 'higher':'lower' %> than the total energy intake of an average Australian adult for weight maintenance.
                 </li>
                 <li>
-                  50% of your daily total energy intake comes from Carbohydrate. Your % carbohydrate intake is within the recommended range.
+                  <%= @carb_percent %>% of your daily total energy intake comes from Carbohydrate. Your % carbohydrate intake is <%= @carb_text %> the recommended range.
                 </li>
                 <li>
-                  20% of your daily total energy intake comes from Protein. Your % protein intake is within the recommended range.
+                  <%= @protein_percent %>% of your daily total energy intake comes from Protein. Your % protein intake is <%= @protein_text %> the recommended range.
                 </li>
                 <li>
-                  25% of your daily total energy intake comes from Fat. Your % fat intake is within the recommended range.
+                  <%= @total_fat_percent %>% of your daily total energy intake comes from Fat. Your % fat intake is <%= @total_fat_text %> the recommended range.
                 </li>
                 <li>
-                  5% of your daily total energy intake comes from Saturated Fat. Your % saturated fat intake is within the recommended range.
+                  <%= @sat_fat_percent %>% of your daily total energy intake comes from Saturated Fat. Your % saturated fat intake is <%= @sat_fat_text %> the recommended range.
+                </li>
+                <li>
+                  Your dietitian can work with you in helping you to achieve a better balance in your diet.
                 </li>
 
               </ul>
@@ -270,7 +273,7 @@
         color: '#ce1126'
       }, {
         name: 'My intake',
-        data: [50, 20, 25, 5], //TODO: add actual values here
+        data: [<%= @carb_percent %>, <%= @protein_percent %>, <%= @total_fat_percent %>, <%= @sat_fat_percent %>],
         color: 'yellowgreen'
       }],
       plotOptions: {

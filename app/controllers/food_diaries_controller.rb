@@ -130,6 +130,40 @@ class FoodDiariesController < ApplicationController
         end
       @day_totals.append(day_total)
     end
+
+    @carb_percent = (((@overall_total[:total_carbohydrate]/3) * 16)/(@overall_total[:total_energy]/3) * 100).to_i
+    @protein_percent = (((@overall_total[:total_protein]/3) * 16)/(@overall_total[:total_energy]/3) * 100).to_i
+    @total_fat_percent = (((@overall_total[:total_total_fat]/3) * 36)/(@overall_total[:total_energy]/3) * 100).to_i
+    @sat_fat_percent = (((@overall_total[:total_saturated_fat]/3) * 36)/(@overall_total[:total_energy]/3) * 100).to_i
+
+    @carb_text = 'within'
+    @protein_text = 'within'
+    @total_fat_text = 'within'
+    @sat_fat_text = 'within'
+
+    if @carb_percent > 65
+      @carb_text = 'above'
+    elsif @carb_percent < 45
+      @carb_text = 'below'
+    end
+
+    if @protein_percent > 25
+      @protein_text = 'above'
+    elsif @protein_percent < 15
+      @protein_text = 'below'
+    end
+
+    if @total_fat_percent > 35
+      @total_fat_text = 'above'
+    elsif @total_fat_percent < 20
+      @total_fat_text = 'below'
+    end
+
+    if @sat_fat_percent > 10
+      @sat_fat_text = 'above'
+    elsif @sat_fat_percent <= 0
+      @sat_fat_text = 'below'
+    end
   end
 
   def new
