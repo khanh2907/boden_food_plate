@@ -150,7 +150,7 @@
 //      setDrag($(this).find('.draggable'));
 //    })
 
-    setFoodOnPlateDraggable();
+    setAllFoodRemove();
 
     $(".droppable").droppable({
       accept: '.draggable',
@@ -164,7 +164,7 @@
             .addClass('food-on-plate img-circle')
             .attr('data-toggle', 'tooltip')
             .attr('data-placement', 'top')
-            .attr('title', foodName));
+            .attr('title', foodName).attr('id', foodId));
 
         var trHtml = '<tr class="food" data-food-id="'+ foodId +'"><td>' + foodName + '</td></tr>';
         $('.current-plate-details .delete-after-first').hide();
@@ -172,7 +172,7 @@
         updateFoodCounter();
         $('[data-toggle="tooltip"]').tooltip()
 
-        setFoodOnPlateDraggable();
+        setFoodRemove(foodId);
       }
     });
 
@@ -313,10 +313,15 @@
     });
   }
 
-  function setFoodOnPlateDraggable() {
-    $('.food-on-plate').draggable({
-      revert: "invalid",
-      cursor: 'move'
+  function setAllFoodRemove() {
+    $('.food-on-plate').on('click', function(e) {
+      removeFood($(this));
+    });
+  }
+
+  function setFoodRemove(foodId) {
+    $('.current-plate').find('#'+foodId).on('click', function(e) {
+      removeFood($(this));
     });
   }
 
@@ -344,5 +349,17 @@
   function updateFoodCounter() {
     var foodCounter = $('.strobe .food-counter');
     foodCounter.html($('.current-plate').find('img').length);
+  }
+
+  function removeFood(food) {
+    var foodId = food.attr('id');
+    food.remove();
+    $('.current-plate-details tr.food[data-food-id='+ foodId +']').first().remove();
+    if ($('.current-plate-details tr.food').length < 1) {
+      $('.current-plate-details .delete-after-first').show();
+    }
+    updateFoodCounter();
+
+    $('.tooltip.in').hide();
   }
 </script>
