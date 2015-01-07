@@ -131,10 +131,10 @@ class FoodDiariesController < ApplicationController
       @day_totals.append(day_total)
     end
 
-    @carb_percent = (((@overall_total[:total_carbohydrate]/3) * 16)/(@overall_total[:total_energy]/3) * 100).to_i
-    @protein_percent = (((@overall_total[:total_protein]/3) * 16)/(@overall_total[:total_energy]/3) * 100).to_i
-    @total_fat_percent = (((@overall_total[:total_total_fat]/3) * 36)/(@overall_total[:total_energy]/3) * 100).to_i
-    @sat_fat_percent = (((@overall_total[:total_saturated_fat]/3) * 36)/(@overall_total[:total_energy]/3) * 100).to_i
+    @carb_percent = @overall_total[:total_energy] == 0 ? 0:(((@overall_total[:total_carbohydrate]/3) * 16)/(@overall_total[:total_energy]/3) * 100).to_i
+    @protein_percent = @overall_total[:total_energy] == 0 ? 0:(((@overall_total[:total_protein]/3) * 16)/(@overall_total[:total_energy]/3) * 100).to_i
+    @total_fat_percent = @overall_total[:total_energy] == 0 ? 0:(((@overall_total[:total_total_fat]/3) * 36)/(@overall_total[:total_energy]/3) * 100).to_i
+    @sat_fat_percent = @overall_total[:total_energy] == 0 ? 0:(((@overall_total[:total_saturated_fat]/3) * 36)/(@overall_total[:total_energy]/3) * 100).to_i
 
     @carb_text = 'within'
     @protein_text = 'within'
@@ -209,6 +209,6 @@ class FoodDiariesController < ApplicationController
     end
 
     def participant_params
-      params[:food_diary][:participant].permit(:pid, :date_of_birth, :gender)
+      params[:food_diary][:participant].permit(:pid, :date_of_birth, :gender, :group)
     end
 end

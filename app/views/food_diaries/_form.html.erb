@@ -17,6 +17,10 @@
         <%= p.label :gender %>
         <%= p.select :gender, Participant.genders.keys.map {|gender| [gender.titleize,gender]}, {}, { :class => 'form-control', :required => true }%>
       </p>
+      <p>
+        <%= p.label :group %>
+        <%= p.text_field :group, class: 'form-control', :required => true %>
+      </p>
     <% end %>
     <%= f.input :visit_number, as: :select, :collection => (1..100), :input_html => {"data-parsley-min" => '1'} %>
   </div>
