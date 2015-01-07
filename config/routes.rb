@@ -7,9 +7,6 @@ Rails.application.routes.draw do
 
   get 'search_category/:id' => 'food_diaries#search_category', :as => 'search_category'
 
-  get 'search/index'
-  get 'search/query'
-  get 'search/query_participant'
   get 'search/check_participant' => 'search#check_participant'
 
   root to: 'food_diaries#index'

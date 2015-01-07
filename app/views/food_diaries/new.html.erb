@@ -3,31 +3,3 @@
   <%= render 'form' %>
   <%= link_to 'Back', food_diaries_path %>
 </div>
-
-<script>
-  participants = new Bloodhound({
-    datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
-    queryTokenizer: Bloodhound.tokenizers.whitespace,
-    remote: {
-      url: '/search/query_participant?q=%QUERY'
-    }
-  })
-
-  // Initialize the engine
-  participants.initialize()
-  $('#food_diary_participant_pid').typeahead(
-      {
-        hint: true,
-        highlight: true,
-        minLength: 1
-      },
-      {
-        name: 'participants',
-        displayKey: 'pid',
-        source: participants.ttAdapter()
-      }
-  ).bind('typeahead:selected', function(obj, selected, name) {
-        $('#food_diary_participant_date_of_birth').val(selected.date_of_birth)
-        $('#food_diary_participant_gender').val(selected.gender)
-      });
-</script>

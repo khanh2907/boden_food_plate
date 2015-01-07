@@ -8,8 +8,4 @@ class Participant < ActiveRecord::Base
 
   validates :date_of_birth, presence: true
   validates :gender, presence: true
-
-  searchable do
-    text :pid
-  end
 end
