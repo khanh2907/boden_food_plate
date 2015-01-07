@@ -176,26 +176,11 @@
         $('.current-plate-details').find('tbody').append(trHtml);
         updateFoodCounter();
         $('[data-toggle="tooltip"]').tooltip()
-        setFoodRemove(foodId);
+        setAllFoodRemove();
 
         if (swapTip != "") {
           $('.tip').html(swapTip);
         }
-      }
-    });
-
-    $(".trash").droppable({
-      accept: '.food-on-plate',
-      drop: function(event, ui) {
-        var foodId = $(ui.draggable).attr('id');
-        $(ui.draggable).remove();
-        $('.current-plate-details tr.food[data-food-id='+ foodId +']').first().remove();
-        if ($('.current-plate-details tr.food').length < 1) {
-          $('.current-plate-details .delete-after-first').show();
-        }
-        updateFoodCounter();
-
-        $('.tooltip.in').hide();
       }
     });
 
@@ -323,12 +308,6 @@
 
   function setAllFoodRemove() {
     $('.food-on-plate').on('click', function(e) {
-      removeFood($(this));
-    });
-  }
-
-  function setFoodRemove(foodId) {
-    $('.current-plate').find('#'+foodId).on('click', function(e) {
       removeFood($(this));
     });
   }
