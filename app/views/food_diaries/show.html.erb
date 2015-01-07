@@ -84,8 +84,8 @@
         <% end %>
       </div>
       <div class="buttons text-center">
-        <a class="btn btn-warning btn-lg" id="empty-plate-btn"><%= fa_icon "ban" %> Empty Plate</a>
-        <a class="btn btn-danger btn-lg" id="delete-meal-btn"><%= fa_icon "trash-o" %> Delete Meal</a>
+        <a class="btn btn-warning" id="empty-plate-btn"><%= fa_icon "ban" %> Empty Plate</a>
+        <a class="btn btn-danger" id="delete-meal-btn"><%= fa_icon "trash-o" %> Delete Meal</a>
       </div>
     </div>
     <div>
@@ -112,22 +112,22 @@
               </plate>
               <% end %>
             <% end %>
-          </div>
-          <div class="pull-left">
-            <% if @day.to_i > 1%>
-              <a class="btn btn-danger btn-lg previous-day-btn" href="<%= "#{food_diary_path(@food_diary)}/#{@day.to_i-1}" %>">Previous Day</a>
-            <% end %>
-          </div>
-          <div class="pull-right">
-            <%= form_tag(next_day_path(@food_diary, @day.to_i), method: 'post' ) do %>
-              <input hidden name="meals_json" id="meals_json"></input>
-              <a class="btn btn-primary btn-lg new-meal-btn"><%= fa_icon "plus" %> New Meal</a>
-              <% if @day.to_i < 3%>
-                <input class="btn btn-success btn-lg next-day-btn" type="submit" value="Next Day">
-              <% else %>
-                <input class="btn btn-success btn-lg next-day-btn" type="submit" value="Complete Food Diary">
+            <div class="pull-left">
+              <% if @day.to_i > 1%>
+                <a class="btn btn-danger previous-day-btn" href="<%= "#{food_diary_path(@food_diary)}/#{@day.to_i-1}" %>">Previous Day</a>
               <% end %>
-            <% end %>
+            </div>
+            <div class="pull-right">
+              <%= form_tag(next_day_path(@food_diary, @day.to_i), method: 'post' ) do %>
+                <input hidden name="meals_json" id="meals_json"></input>
+                <a class="btn btn-primary btnnew-meal-btn"><%= fa_icon "plus" %> New Meal</a>
+                <% if @day.to_i < 3%>
+                  <input class="btn btn-success next-day-btn" type="submit" value="Next Day">
+                <% else %>
+                  <input class="btn btn-success next-day-btn" type="submit" value="Complete Food Diary">
+                <% end %>
+              <% end %>
+            </div>
           </div>
         </div>
         <div class="table-edge" style="opacity: 1;">

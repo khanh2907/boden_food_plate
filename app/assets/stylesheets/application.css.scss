@@ -201,8 +201,6 @@ li.form-error {
   perspective: 400px;
   text-align: center;
   position: relative;
-  padding-top: 15px;
-  margin-bottom: 50px;
 }
 
 plate {
@@ -318,8 +316,8 @@ plate {
 bplate {
   box-shadow: 0px 15px 0px rgba(0,0,0,.1);
   display: inline-block;
-  width: 500px;
-  height: 500px;
+  width: 450px;
+  height: 450px;
   margin: 0 10px;
   position: relative;
 }
@@ -327,26 +325,26 @@ bplate {
 bplate {
   border-bottom: solid 5px #DDD;
   background: white;
-  -webkit-border-radius: 500px;
-  border-radius: 500px;
+  -webkit-border-radius: 450px;
+  border-radius: 450px;
 }
 
 bplate {
   border: solid 1px #eee;
   background: white;
-  -webkit-border-radius: 500px;
-  border-radius: 500px;
+  -webkit-border-radius: 450px;
+  border-radius: 450px;
 }
 
 
 bplate:before {
   content: "";
   display: block;
-  left: calc(15%);
-  top: calc(15%);
+  left: calc(16%);
+  top: calc(16%);
   position: absolute;
-  height: 350px;
-  width: 350px;
+  height: 300px;
+  width: 300px;
   border-radius: 270px;
   border-top: solid 10px #CCC;
   border-bottom: solid 1px #CCC;
@@ -355,8 +353,8 @@ bplate:before {
 }
 
 bplate {
-  height: 500px;
-  width: 500px;
+  height: 450px;
+  width: 450px;
   left:4px;
   z-index: -1;
 }
@@ -370,7 +368,7 @@ bplate {
 }
 
 .plate-details {
-  height: 500px;
+  height: 450px;
   margin-top: 0 !important;
 }
 
