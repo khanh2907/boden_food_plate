@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141220020744) do
+ActiveRecord::Schema.define(version: 20150105090220) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -48,7 +48,7 @@ ActiveRecord::Schema.define(version: 20141220020744) do
     t.string   "name"
     t.float    "energy_c"
     t.string   "image_path"
-    t.string   "swap_tip"
+    t.text     "swap_tip"
   end
 
   create_table "foods_meals", force: true do |t|

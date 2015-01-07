@@ -2,6 +2,10 @@
   <%= render 'food_search' %>
 
   <div class="col-md-9 plates-div" style="display:none;">
+    <div class="tip alert alert-warning">
+      TODO: put some generic tips here
+    </div>
+
     <div class="col-md-8 col-md-offset-2 no-plates-div" style="display:none;">
       <div class="form-box text-center">
         <h2>Uh oh! You have no plates!</h2>
@@ -157,6 +161,7 @@
       drop: function(event, ui) {
         var foodId = $(ui.draggable).data('food-id');
         var foodName = $(ui.draggable).data('food-name');
+        var swapTip = $(ui.draggable).data('swap-tip');
         $('.current-plate').append($(ui.draggable).clone()
             .find('img')
             .attr('height', '75')
@@ -171,8 +176,11 @@
         $('.current-plate-details').find('tbody').append(trHtml);
         updateFoodCounter();
         $('[data-toggle="tooltip"]').tooltip()
-
         setFoodRemove(foodId);
+
+        if (swapTip != "") {
+          $('.tip').html(swapTip);
+        }
       }
     });
 
