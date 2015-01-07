@@ -1,0 +1,1 @@
+GENERIC_TIPS = YAML.load_file(Rails.root.join('config', 'generic_tips.yml'))

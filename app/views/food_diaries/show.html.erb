@@ -3,7 +3,7 @@
 
   <div class="col-md-9 plates-div" style="display:none;">
     <div class="tip alert alert-warning">
-      TODO: put some generic tips here
+      <%= GENERIC_TIPS[(rand() * GENERIC_TIPS.size).to_i] %>
     </div>
 
     <div class="col-md-8 col-md-offset-2 no-plates-div" style="display:none;">
@@ -369,5 +369,16 @@
     updateFoodCounter();
 
     $('.tooltip.in').hide();
+  }
+
+  var GENERIC_TIPS = <%= GENERIC_TIPS.to_json.html_safe %>;
+  var TIP_RANDOM_SEED = GENERIC_TIPS.length;
+
+  var intervalID = window.setInterval(changeGenericTip, 60000);
+
+  function changeGenericTip() {
+    var rand = Math.floor(Math.random() * TIP_RANDOM_SEED);
+    $('.tip').html(GENERIC_TIPS[rand]);
+
   }
 </script>
