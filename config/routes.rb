@@ -4,6 +4,7 @@ Rails.application.routes.draw do
   get 'food_diaries/:id/:day' => 'food_diaries#day', :as => 'fd_day'
   post 'food_diaries/:id/:day' => 'food_diaries#next_day', :as => 'next_day'
   get 'breakdown/:id/' => 'food_diaries#breakdown', :as => 'food_diary_breakdown'
+  get 'breakdown/:id/export' => 'food_diaries#breakdown_export', :as=> 'food_diary_breakdown_export'
 
   get 'search_category/:id' => 'food_diaries#search_category', :as => 'search_category'
 
