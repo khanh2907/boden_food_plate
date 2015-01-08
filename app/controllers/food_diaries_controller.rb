@@ -155,83 +155,46 @@ class FoodDiariesController < ApplicationController
   end
 
   def setNutritionalValues(food_diary)
-
-    day1_meals = Meal.includes(:foods).where(food_diary_id: food_diary.id, day: 1)
-    day2_meals = Meal.includes(:foods).where(food_diary_id: food_diary.id, day: 2)
-    day3_meals = Meal.includes(:foods).where(food_diary_id: food_diary.id, day: 3)
-
-    @days = [day1_meals, day2_meals, day3_meals]
-
     sql = """
-      Select s.meal_id, SUM(energy) as total_energy,
-      ROUND(SUM(energy_c)::numeric, 2) as total_energy_c,
-      SUM(protein) as total_protein,
-      SUM(total_fat) as total_total_fat,
-      SUM(saturated_fat) as total_saturated_fat,
-      SUM(cholesterol) as total_cholesterol,
-      SUM(carbohydrate) as total_carbohydrate,
-      SUM(sugars) as total_sugars,
-      SUM(dietary_fibre) as total_dietary_fibre,
-      SUM(sodium) as total_sodium
-      from foods as f inner join
-        (SELECT food_id, meal_id FROM foods_meals where meal_id
-          IN (SELECT id from meals where food_diary_id = #{food_diary.id})) as s
-      ON f.id=s.food_id GROUP by s.meal_id
+      select
+      SUM(t.total_energy) AS total_energy,
+      SUM(t.total_energy_c) AS total_energy_c,
+      SUM(t.total_protein) AS total_protein,
+      SUM(t.total_total_fat) AS total_total_fat,
+      SUM(t.total_saturated_fat) AS total_saturated_fat,
+      SUM(t.total_cholesterol) AS total_cholesterol,
+      SUM(t.total_carbohydrate) AS total_carbohydrate,
+      SUM(t.total_sugars) AS total_sugars,
+      SUM(t.total_dietary_fibre) AS total_dietary_fibre,
+      SUM(t.total_sodium) AS total_sodium
+      from
+      (Select s.meal_id, SUM(energy) as total_energy,
+            ROUND(SUM(energy_c)::numeric, 2) as total_energy_c,
+            SUM(protein) as total_protein,
+            SUM(total_fat) as total_total_fat,
+            SUM(saturated_fat) as total_saturated_fat,
+            SUM(cholesterol) as total_cholesterol,
+            SUM(carbohydrate) as total_carbohydrate,
+            SUM(sugars) as total_sugars,
+            SUM(dietary_fibre) as total_dietary_fibre,
+            SUM(sodium) as total_sodium
+            from foods as f inner join
+              (SELECT food_id, meal_id FROM foods_meals where meal_id
+                IN (SELECT id from meals where food_diary_id = #{food_diary.id})) as s
+            ON f.id=s.food_id GROUP by s.meal_id) as t
     """
-    @meal_totals = ActiveRecord::Base.connection.exec_query(sql).to_hash
-
-    @day_totals = []
-
-    @overall_total = {:total_energy => 0,
-                      :total_energy_c => 0,
-                      :total_protein => 0,
-                      :total_total_fat => 0,
-                      :total_saturated_fat => 0,
-                      :total_cholesterol => 0,
-                      :total_carbohydrate => 0,
-                      :total_sugars => 0,
-                      :total_dietary_fibre => 0,
-                      :total_sodium => 0
+    @totals = ActiveRecord::Base.connection.exec_query(sql).to_hash.first
+    @overall_total = {:total_energy => @totals['total_energy'].to_f,
+                      :total_energy_c => @totals['total_energy_c'].to_f,
+                      :total_protein => @totals['total_protein'].to_f,
+                      :total_total_fat => @totals['total_total_fat'].to_f,
+                      :total_saturated_fat => @totals['total_saturated_fat'].to_f,
+                      :total_cholesterol => @totals['total_cholesterol'].to_f,
+                      :total_carbohydrate => @totals['total_carbohydrate'].to_f,
+                      :total_sugars => @totals['total_sugars'].to_f,
+                      :total_dietary_fibre => @totals['total_dietary_fibre'].to_f,
+                      :total_sodium => @totals['total_sodium'].to_f
     }
-
-    @days.each do |day|
-      day_total = {:total_energy => 0,
-                   :total_energy_c => 0,
-                   :total_protein => 0,
-                   :total_total_fat => 0,
-                   :total_saturated_fat => 0,
-                   :total_cholesterol => 0,
-                   :total_carbohydrate => 0,
-                   :total_sugars => 0,
-                   :total_dietary_fibre => 0,
-                   :total_sodium => 0
-      }
-      day.pluck(:id).each do |id|
-        meal_total = @meal_totals.select {|m| m["meal_id"] == "#{id}"}.first
-        day_total[:total_energy] += meal_total['total_energy'].to_f
-        day_total[:total_energy_c] += meal_total['total_energy_c'].to_f
-        day_total[:total_protein] += meal_total['total_protein'].to_f
-        day_total[:total_total_fat] += meal_total['total_total_fat'].to_f
-        day_total[:total_saturated_fat] += meal_total['total_saturated_fat'].to_f
-        day_total[:total_cholesterol] += meal_total['total_cholesterol'].to_f
-        day_total[:total_carbohydrate] += meal_total['total_carbohydrate'].to_f
-        day_total[:total_sugars] += meal_total['total_sugars'].to_f
-        day_total[:total_dietary_fibre] += meal_total['total_dietary_fibre'].to_f
-        day_total[:total_sodium] += meal_total['total_sodium'].to_f
-
-        @overall_total[:total_energy] += meal_total['total_energy'].to_f
-        @overall_total[:total_energy_c] += meal_total['total_energy_c'].to_f
-        @overall_total[:total_protein] += meal_total['total_protein'].to_f
-        @overall_total[:total_total_fat] += meal_total['total_total_fat'].to_f
-        @overall_total[:total_saturated_fat] += meal_total['total_saturated_fat'].to_f
-        @overall_total[:total_cholesterol] += meal_total['total_cholesterol'].to_f
-        @overall_total[:total_carbohydrate] += meal_total['total_carbohydrate'].to_f
-        @overall_total[:total_sugars] += meal_total['total_sugars'].to_f
-        @overall_total[:total_dietary_fibre] += meal_total['total_dietary_fibre'].to_f
-        @overall_total[:total_sodium] += meal_total['total_sodium'].to_f
-      end
-      @day_totals.append(day_total)
-    end
 
     @carb_percent = @overall_total[:total_energy] == 0 ? 0:(((@overall_total[:total_carbohydrate]/3) * 16)/(@overall_total[:total_energy]/3) * 100).to_i
     @protein_percent = @overall_total[:total_energy] == 0 ? 0:(((@overall_total[:total_protein]/3) * 16)/(@overall_total[:total_energy]/3) * 100).to_i
