@@ -1,12 +1,18 @@
+require 'csv'
 class FoodDiariesController < ApplicationController
   before_filter :authenticate_user!
-  before_action :set_food_diary, only: [:show, :edit, :update, :destroy, :day, :next_day, :breakdown, :breakdown_export]
+  before_action :set_food_diary, only: [:show, :edit, :update, :destroy, :day, :next_day, :breakdown]
 
   respond_to :html
 
   def index
     @food_diaries = FoodDiary.all
-    respond_with(@food_diaries)
+
+    respond_to do |format|
+      format.html
+      format.csv {send_data generate_totals_csv, :filename => "boden_food_diaries_#{DateTime.now.strftime('%d%m%Y')}.csv"}
+      format.xls {send_data generate_totals_csv(col_sep: "\t"), :filename => "boden_food_diaries_#{DateTime.now.strftime('%d%m%Y')}.xls"}
+    end
   end
 
   def show
@@ -56,18 +62,6 @@ class FoodDiariesController < ApplicationController
     setNutritionalValues(@food_diary)
   end
 
-  def breakdown_export
-    @participant = @food_diary.participant
-    setNutritionalValues(@food_diary)
-
-    # TODO: only take the @overall_total values
-    # TODO: how to store participant details?
-    # TODO: formats -> .csv and .xsl
-    # TODO: multiple days for sheets?
-    # TODO: add a export for all visits of participant
-
-  end
-
   def new
     @food_diary = FoodDiary.new
     respond_with(@food_diary)
@@ -112,6 +106,52 @@ class FoodDiariesController < ApplicationController
 
   def participant_params
     params[:food_diary][:participant].permit(:pid, :date_of_birth, :gender, :group)
+  end
+
+  def generate_totals_csv(options = {})
+    sql = '''
+      select parts.pid as participant_id, parts.group, parts.gender, parts.date_of_birth, totals.visit_number, totals.fd_date as date ,totals.total_energy,
+      totals.total_energy_c,
+      totals.total_protein,
+      totals.total_total_fat,
+      totals.total_saturated_fat,
+      totals.total_cholesterol,
+      totals.total_carbohydrate,
+      totals.total_sugars,
+      totals.total_dietary_fibre,
+      totals.total_sodium from
+      (select s.food_diary_id, s.participant_id, s.visit_number, s.fd_date, SUM(energy) as total_energy,
+      ROUND(SUM(energy_c)::numeric, 2) as total_energy_c,
+      SUM(protein) as total_protein,
+      SUM(total_fat) as total_total_fat,
+      SUM(saturated_fat) as total_saturated_fat,
+      SUM(cholesterol) as total_cholesterol,
+      SUM(carbohydrate) as total_carbohydrate,
+      SUM(sugars) as total_sugars,
+      SUM(dietary_fibre) as total_dietary_fibre,
+      SUM(sodium) as total_sodium from foods as f
+      inner join
+        (select food_id, fdm.food_diary_id, fdm.visit_number, fdm.participant_id, fdm.fd_date from foods_meals as fm
+        right outer join
+          (select m.food_diary_id, fd.visit_number, fd.participant_id, m.id as meal_id, fd.created_at as fd_date
+          from food_diaries as fd
+          inner join meals as m
+          on m.food_diary_id=fd.id) as fdm
+        on fdm.meal_id = fm.meal_id) as s
+      on f.id = s.food_id group by food_diary_id, visit_number, participant_id, fd_date) as totals
+      inner join participants as parts on totals.participant_id=parts.id;
+    '''
+    totals = ActiveRecord::Base.connection.exec_query(sql).to_hash
+
+    CSV.generate(options) do |csv|
+      csv << totals[0].keys.map!(&:titleize)
+      totals.each do |fd|
+        gender = Participant.genders.select{|key, val| key if val == fd['gender'].to_i }.first[0]
+        fd['gender'] = gender
+        csv << fd.values
+      end
+    end
+
   end
 
   def setNutritionalValues(food_diary)

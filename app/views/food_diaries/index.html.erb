@@ -3,8 +3,11 @@
     <div class="col-md-10 col-md-offset-1">
       <h3>
         Food Diaries
+        <%= link_to food_diaries_path(:format => 'xls') do %>
+          <btn class="btn btn-success pull-right p-index-btn"><%= fa_icon "download" %> Export</btn>
+        <% end %>
         <%= link_to new_food_diary_path do %>
-          <btn class="btn btn-primary pull-right"><%= fa_icon "plus" %> New Food Diary</btn>
+          <btn class="btn btn-primary pull-right p-index-btn"><%= fa_icon "plus" %> New Food Diary</btn>
         <% end %>
       </h3>
 
