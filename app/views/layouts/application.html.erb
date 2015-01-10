@@ -16,8 +16,12 @@
     <%= render 'layouts/navigation' %>
 
     <div class="container main">
-      <%= render 'layouts/messages' %>
-      <%= yield %>
+      <div class="row">
+        <%= render 'layouts/messages' %>
+      </div>
+      <div class="row">
+        <%= yield %>
+      </div>
     </div>
     <div id="push"></div>
   </div>

@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  get 'guide' => 'visitors#guide', :as => 'guide'
   get 'food_diaries/export' => 'food_diaries#export', :as=> 'food_diaries_export'
   resources :food_diaries
 

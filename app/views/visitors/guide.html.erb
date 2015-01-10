@@ -1,0 +1,37 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md-10 col-md-offset-1">
+      <h2>Trial Manager Guide</h2><hr>
+      <h3>Food Diary Management</h3>
+      <h4>1. Creating a food diary</h4>
+      <ul>
+        <li>To create a new food diary, click <a class="btn btn-primary btn-xs"><%= fa_icon 'plus' %> New Food Diary</a> on the <%= link_to 'Food Diaries', food_diaries_path, target:'_blank' %> page.</li>
+        <li>Fill in the form and submit.
+          <ul>
+            <li><%= image_tag '/guide_gifs/new_fd.gif', height:300 %></li>
+          </ul>
+        </li>
+      </ul>
+      <h4>2. Entry of meals</h4>
+      <ul>
+        <li>On the bottom, you should see a picture of a table with plates on it. The bouncing plate is currently active meal. You can click on other plates to select them.</li>
+        <li>You can also click <a class="btn btn-primary btn-xs"><%= fa_icon 'plus'%> New Meal</a></li> to add more meals if needed.
+        <li>On the left, you will see a panel with food categories. Click on these categories and you will be presented with a table of foods.</li>
+        <li>Drag and drop foods onto the big plate to add foods to a meal.
+          <ul><li><%= image_tag '/guide_gifs/drag_food.gif', height:200 %></li></ul>
+        </li>
+        <li>To remove a food from a meal, simply click on the food on the plate.
+          <ul><li><%= image_tag '/guide_gifs/remove_food.gif', height:200 %></li></ul>
+        </li>
+        <li>When the day is complete, click <a class="btn btn-success btn-xs">Next Day</a> to proceed to the next day.</li>
+        <li>Repeat for day 2 and day 3.</li>
+        <li>On day 3, click <a class="btn btn-success btn-xs">Complete Food Diary</a> to end the food diary entry process.</li>
+        <li>You will now see a nutritional analysis.</li>
+      </ul>
+      <h4>3. Exporting food diaries</h4>
+      <ul>
+        <li>On the food diaries home page, click <a class="btn btn-success btn-xs"><%= fa_icon 'download'%> Export</a>. This will let you download an Excel spreadsheet with all the food diaries information.</li>
+      </ul>
+    </div>
+  </div>
+</div>
