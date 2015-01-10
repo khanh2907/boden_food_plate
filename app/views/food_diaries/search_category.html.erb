@@ -11,7 +11,7 @@
           <% unless food.image_path.nil? %>
             <img class="lazy" src="/loading-text.gif" data-src="<%= food.image_path %>" height="50"/>
           <% else %>
-            <img src="/tmp-foods/<%= (0..4).to_a.sample %>.png" height="50" id="<%= food.id %>"/>
+            <img class="lazy" src="/loading-text.gif" data-src="/tmp-foods/<%= (0..4).to_a.sample %>.png" height="50"/>
           <% end %>
           <%= food.name %>
         </div>
