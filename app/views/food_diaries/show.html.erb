@@ -174,9 +174,12 @@
         var trHtml = '<tr class="food" data-food-id="'+ foodId +'"><td>' + foodName + '</td></tr>';
         $('.current-plate-details .delete-after-first').hide();
         $('.current-plate-details').find('tbody').append(trHtml);
+
         updateFoodCounter();
+
         $('[data-toggle="tooltip"]').tooltip()
-        setAllFoodRemove();
+
+        setRemoveFood($('.current-plate').children().last());
 
         if (swapTip != "") {
           $('.tip').html(swapTip);
@@ -310,6 +313,12 @@
     $('.food-on-plate').on('click', function(e) {
       removeFood($(this));
     });
+  }
+
+  function setRemoveFood(food) {
+    food.on('click', function(e) {
+      removeFood($(this));
+    })
   }
 
   function applyPlateOnClick() {
