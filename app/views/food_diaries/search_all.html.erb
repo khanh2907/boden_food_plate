@@ -8,12 +8,21 @@
     <tr>
       <td>
         <div class="draggable" data-food-id="<%= food.id %>" data-food-name="<%= food.name %>" data-swap-tip="<%= food.swap_tip %>">
-          <% unless food.image_path.nil? %>
-            <img class="lazy" src="/loading-text.gif" data-src="<%= food.image_path %>" height="50"/>
-          <% else %>
-            <img class="lazy" src="/loading-text.gif" data-src="/tmp-foods/<%= (0..4).to_a.sample %>.png" height="50"/>
-          <% end %>
-          <%= food.name %>
+          <div class="col-md-4">
+            <% unless food.image_path.nil? %>
+              <img class="lazy" src="/loading-text.gif" data-src="<%= food.image_path %>" width="50"/>
+            <% else %>
+              <img class="lazy" src="/loading-text.gif" data-src="/tmp-foods/<%= (0..4).to_a.sample %>.png" height="50"/>
+            <% end %>
+          </div>
+          <div class="col-md-8">
+            <div class="row">
+              <%= food.name %>
+            </div>
+            <div class="row">
+              <small><%= food.serving_size %></small>
+            </div>
+          </div>
         </div>
       </td>
       <td>
@@ -37,7 +46,7 @@
     fnDrawCallback: function() {
       $('table#all').find('.lazy:not(.loaded)').each(function() {
         $(this).attr('src', $(this).data('src'));
-        $(this).parent().draggable({
+        $(this).parent().parent().draggable({
           revert: "invalid",
           helper: "clone",
           cursor: "move"
