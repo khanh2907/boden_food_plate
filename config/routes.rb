@@ -7,7 +7,7 @@ Rails.application.routes.draw do
   post 'food_diaries/:id/:day' => 'food_diaries#next_day', :as => 'next_day'
   get 'breakdown/:id/' => 'food_diaries#breakdown', :as => 'food_diary_breakdown'
 
-
+  get 'search_all' => 'food_diaries#search_all', :as => 'search_all'
   get 'search_category/:id' => 'food_diaries#search_category', :as => 'search_category'
 
   get 'search/check_participant' => 'search#check_participant'

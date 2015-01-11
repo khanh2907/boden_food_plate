@@ -2,6 +2,20 @@
   <div class="food-wrapper">
     <h3>Foods</h3>
     <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+      <div class="panel panel-default" id="all">
+        <a data-toggle="collapse" data-parent="#accordion" href="#collapse-all" aria-expanded="true" aria-controls="collapse-all" data-endpoint="<%= search_all_path %>" id="all">
+          <div class="panel-heading" role="tab" id="heading-all">
+            <h4 class="panel-title">
+              Show All Foods
+            </h4>
+          </div>
+        </a>
+        <div id="collapse-all" class="panel-collapse collapse" role="tabpanel" aria-labelledby=heading-all" data-id="all">
+          <div class="panel-body">
+            test
+          </div>
+        </div>
+      </div>
       <% FoodCategory.all.each_with_index do |fc, index| %>
       <% food_category_id = fc.name.gsub(' ', '').gsub('&', '').gsub(',','').underscore %>
       <div class="panel panel-default" id="<%= food_category_id %>">

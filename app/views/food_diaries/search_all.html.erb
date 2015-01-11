@@ -1,0 +1,50 @@
+<table class="table" id="all">
+  <thead>
+  <th>Food</th>
+  <th></th>
+  </thead>
+  <tbody>
+  <% @foods.each do |food|%>
+    <tr>
+      <td>
+        <div class="draggable" data-food-id="<%= food.id %>" data-food-name="<%= food.name %>" data-swap-tip="<%= food.swap_tip %>">
+          <% unless food.image_path.nil? %>
+            <img class="lazy" src="/loading-text.gif" data-src="<%= food.image_path %>" height="50"/>
+          <% else %>
+            <img class="lazy" src="/loading-text.gif" data-src="/tmp-foods/<%= (0..4).to_a.sample %>.png" height="50"/>
+          <% end %>
+          <%= food.name %>
+        </div>
+      </td>
+      <td>
+        <!--<a class="btn btn-default btn-xs"><%= fa_icon 'plus' %></a>-->
+      </td>
+    </tr>
+  <% end %>
+  </tbody>
+</table>
+
+<script>
+  var table = $('table#all');
+  // Initialise the food table
+  $('table#all').dataTable({
+    "aoColumnDefs": [
+      { 'bSortable': false, 'aTargets': [ 1 ] }
+    ],
+    iDisplayLength: 5,
+    bLengthChange: false,
+    pagingType: 'simple',
+    fnDrawCallback: function() {
+      $('table#all').find('.lazy:not(.loaded)').each(function() {
+        $(this).attr('src', $(this).data('src'));
+        $(this).parent().draggable({
+          revert: "invalid",
+          helper: "clone",
+          cursor: "move"
+        });
+        $(this).addClass('loaded');
+      })
+    }
+  });
+  $('#all_wrapper').find('.col-xs-6')[0].remove()
+</script>
