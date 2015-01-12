@@ -25,14 +25,11 @@
             <td><%= fd.visit_number %></td>
             <td><%= fd.created_at.localtime.strftime('%d/%m/%Y %H:%M') %></td>
             <td>
-              <%= link_to(food_diary_breakdown_path(fd), :class => 'btn btn-xs btn-success') do %>
-                <%= fa_icon "bar-chart" %> View Breakdown
-              <% end %>
               <%= link_to(fd_day_path(fd, 1), :class => 'btn btn-xs btn-primary') do %>
                 <%= fa_icon "book" %> Update Diary
               <% end %>
-              <%= link_to(food_diary_path(fd), :data => { :confirm => "Are you sure?" }, :method => :delete, :class => 'btn btn-xs btn-danger') do %>
-                <%= fa_icon "trash" %> Delete
+              <%= link_to(food_diary_breakdown_path(fd), :class => 'btn btn-xs btn-success') do %>
+                <%= fa_icon "bar-chart" %> View Breakdown
               <% end %>
             </td>
           </tr>
