@@ -26,7 +26,7 @@
         </div>
       </td>
       <td>
-        <!--<a class="btn btn-default btn-xs"><%= fa_icon 'plus' %></a>-->
+        <a class="btn btn-default btn-xs add-food-btn" data-food-id="<%= food.id %>"><%= fa_icon 'plus' %></a>
       </td>
     </tr>
     <% end %>
@@ -36,7 +36,7 @@
 <script>
   var table = $('table#<%= @category.id %>');
   // Initialise the food table
-  $('table#<%= @category.id %>').dataTable({
+  table.dataTable({
     "aoColumnDefs": [
       { 'bSortable': false, 'aTargets': [ 1 ] }
     ],
@@ -44,7 +44,7 @@
     bLengthChange: false,
     pagingType: 'simple',
     fnDrawCallback: function() {
-      $('table#<%= @category.id %>').find('.lazy:not(.loaded)').each(function() {
+      table.find('.lazy:not(.loaded)').each(function() {
         $(this).attr('src', $(this).data('src'));
         $(this).parent().parent().draggable({
           revert: "invalid",
@@ -52,7 +52,15 @@
           cursor: "move"
         });
         $(this).addClass('loaded');
-      })
+      });
+      table.find('.add-food-btn:not(.loaded)').each(function() {
+        var button = $(this)
+        button.on('click', function(e) {
+          var food = $(this).parent().parent().find('td').find('.draggable')
+          addFoodToPlate(food)
+        });
+        button.addClass('loaded')
+      });
     }
   });
   $('#<%= @category.id %>_wrapper').find('.col-xs-6')[0].remove()

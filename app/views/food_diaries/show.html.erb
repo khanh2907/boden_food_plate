@@ -139,9 +139,6 @@
 </div>
 <script>
 
-  <!---->
-//  var trashHtml = '<div class="col-xs-6"><div class="trash" data-toggle="tooltip" data-placement="left" title="Drag and drop food here to remove it from a plate."><i class="fa fa-trash"></div></div>'
-//  $('.col-xs-6').first().after(trashHtml)
   $('[data-toggle="tooltip"]').tooltip()
 
   onLoadDo();
@@ -150,40 +147,12 @@
 
     var plateCounter = $('.plate-detail').length;
 
-//    $table.$('tr').each(function(index) {
-//      setDrag($(this).find('.draggable'));
-//    })
-
     setAllFoodRemove();
 
     $(".droppable").droppable({
       accept: '.draggable',
       drop: function(event, ui) {
-        var foodId = $(ui.draggable).data('food-id');
-        var foodName = $(ui.draggable).data('food-name');
-        var swapTip = $(ui.draggable).data('swap-tip');
-        $('.current-plate').append($(ui.draggable).clone()
-            .find('img')
-            .attr('height', '75')
-            .attr('width', '75')
-            .addClass('food-on-plate img-circle')
-            .attr('data-toggle', 'tooltip')
-            .attr('data-placement', 'top')
-            .attr('title', foodName).attr('id', foodId));
-
-        var trHtml = '<tr class="food" data-food-id="'+ foodId +'"><td>' + foodName + '</td></tr>';
-        $('.current-plate-details .delete-after-first').hide();
-        $('.current-plate-details').find('tbody').append(trHtml);
-
-        updateFoodCounter();
-
-        $('[data-toggle="tooltip"]').tooltip()
-
-        setRemoveFood($('.current-plate').children().last());
-
-        if (swapTip != "") {
-          $('.tip').html(swapTip);
-        }
+        addFoodToPlate($(ui.draggable));
       }
     });
 
@@ -301,63 +270,6 @@
     return plates;
   }
 
-  function setDrag(obj) {
-    obj.draggable({
-      revert: "invalid",
-      helper: "clone",
-      cursor: "move"
-    });
-  }
-
-  function setAllFoodRemove() {
-    $('.food-on-plate').on('click', function(e) {
-      removeFood($(this));
-    });
-  }
-
-  function setRemoveFood(food) {
-    food.on('click', function(e) {
-      removeFood($(this));
-    })
-  }
-
-  function applyPlateOnClick() {
-    $('plate').on('click', function(e) {
-      if ($(this).hasClass('strobe')) {
-        return;
-      }
-      else {
-        togglePlates($(this).attr('id'));
-      }
-    })
-  }
-
-  function togglePlates(id) {
-    $('.strobe').removeClass('strobe')
-    $('.current-plate-details').removeClass('current-plate-details').addClass('hidden');
-    $('.current-plate').removeClass('current-plate').addClass('hidden');
-
-    $('plate[id='+ id +']').addClass('strobe');
-    $('.plate-detail[id='+ id +']').removeClass('hidden').addClass('current-plate-details');
-    $('.food-goes-here[id='+ id +']').removeClass('hidden').addClass('current-plate');
-  }
-
-  function updateFoodCounter() {
-    var foodCounter = $('.strobe .food-counter');
-    foodCounter.html($('.current-plate').find('img').length);
-  }
-
-  function removeFood(food) {
-    var foodId = food.attr('id');
-    food.remove();
-    $('.current-plate-details tr.food[data-food-id='+ foodId +']').first().remove();
-    if ($('.current-plate-details tr.food').length < 1) {
-      $('.current-plate-details .delete-after-first').show();
-    }
-    updateFoodCounter();
-
-    $('.tooltip.in').hide();
-  }
 
   var GENERIC_TIPS = <%= GENERIC_TIPS.to_json.html_safe %>;
   var TIP_RANDOM_SEED = GENERIC_TIPS.length;
@@ -367,6 +279,5 @@
   function changeGenericTip() {
     var rand = Math.floor(Math.random() * TIP_RANDOM_SEED);
     $('.tip').html(GENERIC_TIPS[rand]);
-
   }
 </script>
