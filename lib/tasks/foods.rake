@@ -20,7 +20,7 @@ namespace :foods do
       category.save!
       food_count = 0
       sheet.parse(:header_search => ['Food Name']).each do |food_hash|
-        next if food_hash["Food Name"] == "Food Name"
+        next if food_hash["Food Name"] == "Food Name" or food_hash["Food Name"] == ''
         food = Food.new
         food.food_category = category
         food.name = food_hash["Food Name"]           unless food_hash["Food Name"].nil?
