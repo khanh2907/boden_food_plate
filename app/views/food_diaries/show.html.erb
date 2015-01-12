@@ -56,7 +56,7 @@
               </tr>
               <% meal.foods.each do |food| %>
                 <tr class="food" data-food-id="<%= food.id %>">
-                  <td><%= food.name %></td>
+                  <td><%= food.name %> <small><%= "(#{food.serving_size})" %></small></td>
                 </tr>
               <%end %>
               </tbody>

@@ -40,6 +40,7 @@ function ready() {
 function addFoodToPlate(foodElement) {
     var foodId = foodElement.data('food-id');
     var foodName = foodElement.data('food-name');
+    var servingSize = foodElement.data('serving-size');
     var swapTip = foodElement.data('swap-tip');
     $('.current-plate').append(foodElement.clone()
         .find('img')
@@ -50,7 +51,7 @@ function addFoodToPlate(foodElement) {
         .attr('data-placement', 'top')
         .attr('title', foodName).attr('id', foodId));
 
-    var trHtml = '<tr class="food" data-food-id="'+ foodId +'"><td>' + foodName + '</td></tr>';
+    var trHtml = '<tr class="food" data-food-id="'+ foodId +'"><td>' + foodName + ' <small>(' + servingSize + ')</small></td></tr>';
     $('.current-plate-details .delete-after-first').hide();
     $('.current-plate-details').find('tbody').append(trHtml);
 
