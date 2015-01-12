@@ -120,7 +120,7 @@
             <div class="pull-right">
               <%= form_tag(next_day_path(@food_diary, @day.to_i), method: 'post' ) do %>
                 <input hidden name="meals_json" id="meals_json"></input>
-                <a class="btn btn-primary btnnew-meal-btn"><%= fa_icon "plus" %> New Meal</a>
+                <a class="btn btn-primary new-meal-btn"><%= fa_icon "plus" %> New Meal</a>
                 <% if @day.to_i < 3%>
                   <input class="btn btn-success next-day-btn" type="submit" value="Next Day">
                 <% else %>
