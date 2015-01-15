@@ -1,9 +1,8 @@
 <div class="col-md-12">
   <h3><%= @food_category.name %></h3>
   <hr>
-  <table class="table table-striped" id="foods-table">
+  <table class="table table-striped responsive no-wrap" id="foods-table">
     <thead>
-    <th>Image</th>
     <th>Food Name</th>
     <th>Serving size</th>
     <th>Serving weight (g)</th>
@@ -22,11 +21,6 @@
     <tbody>
     <% @food_category.foods.each do |food| %>
       <tr>
-        <td>
-          <div style="width: 100px; height: 100px;">
-          <%= image_tag food.image_path, class: 'img-responsive' %>
-          </div>
-        </td>
         <td><%= food.name %></td>
         <td><%= food.serving_size %></td>
         <td><%= food.serving_weight %></td>
