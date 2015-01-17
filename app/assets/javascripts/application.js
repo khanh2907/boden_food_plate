@@ -44,8 +44,8 @@ function addFoodToPlate(foodElement) {
     var swapTip = foodElement.data('swap-tip');
     $('.current-plate').append(foodElement.clone()
         .find('img')
-        .attr('height', '75')
-        .attr('width', '75')
+        .attr('height', '100')
+        .attr('width', '100')
         .addClass('food-on-plate img-circle')
         .attr('data-toggle', 'tooltip')
         .attr('data-placement', 'top')
@@ -123,6 +123,19 @@ function removeFood(food) {
     updateFoodCounter();
 
     $('.tooltip.in').hide();
+}
+
+function elementIsInView(elem, container) {
+    var elemTop = elem.offset().top;
+    var elemBottom = elemTop + elem.height();
+
+    var containerTop = container.offset().top;
+    var containerBottom = containerTop + container.height();
+
+    // check if elemTop > containerTop and elemBottom < containerBottom
+
+    if (elemTop >= containerTop && elemBottom <= containerBottom ) return true;
+    else return false;
 }
 
 $(document).ready(ready)
