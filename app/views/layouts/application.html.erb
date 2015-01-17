@@ -11,9 +11,9 @@
   <link rel="icon" href="/favicon.ico" type="image/x-icon">
 </head>
 <body>
-<% unless @hide_nav %>
+<% unless @hide_layout %>
   <div id="wrap">
-    <%= render 'layouts/navigation' %>
+    <%= render 'layouts/navigation' unless @hide_nav %>
 
     <div class="container main">
       <div class="row">

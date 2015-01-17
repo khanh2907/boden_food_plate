@@ -16,12 +16,12 @@ class FoodDiariesController < ApplicationController
   end
 
   def show
-    @hide_nav = true
+    @hide_layout = true
     @meals = @food_diary.meals.where(day: @day.to_i)
   end
 
   def day
-    @hide_nav = true
+    @hide_layout = true
     @day = params[:day]
     @meals = @food_diary.meals.where(day: @day.to_i)
     @default_plates = ['Breakfast', 'Snack', 'Lunch', 'Snack', 'Supper', 'Dinner']
@@ -63,6 +63,7 @@ class FoodDiariesController < ApplicationController
   end
 
   def breakdown
+    @hide_nav = true
     @participant = @food_diary.participant
     setNutritionalValues(@food_diary)
   end
