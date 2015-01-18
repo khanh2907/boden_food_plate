@@ -97,14 +97,27 @@ function applyPlateOnClick() {
     })
 }
 
+function nextPlate() {
+    var nextPlateId = parseInt($('plate.strobe').attr('id')) + 1;
+    togglePlates(nextPlateId);
+}
+
 function togglePlates(id) {
-    $('.strobe').removeClass('strobe')
+    $('.strobe').removeClass('strobe');
     $('.current-plate-details').removeClass('current-plate-details').addClass('hidden');
     $('.current-plate').removeClass('current-plate').addClass('hidden');
 
     $('plate[id='+ id +']').addClass('strobe');
     $('.plate-detail[id='+ id +']').removeClass('hidden').addClass('current-plate-details');
     $('.food-goes-here[id='+ id +']').removeClass('hidden').addClass('current-plate');
+
+    if ($('plate:last').hasClass('strobe')) {
+        $('#next-meal-btn').hide();
+        $('#day-form').show();
+    } else {
+        $('#day-form').hide();
+        $('#next-meal-btn').show();
+    }
 }
 
 function updateFoodCounter() {
