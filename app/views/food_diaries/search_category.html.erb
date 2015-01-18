@@ -6,7 +6,7 @@
   <tbody>
     <% @category.foods.each do |food|%>
     <tr>
-      <td>
+      <td data-order="<%= food.name %>">
         <div>
           <div class="col-md-5">
           <% unless food.image_path.nil? %>
@@ -37,9 +37,8 @@
   var table = $('table#<%= @category.id %>');
   // Initialise the food table
   table.dataTable({
-    "aoColumnDefs": [
-      { 'bSortable': false, 'aTargets': [ 1 ] }
-    ],
+    "bSort" : false,
+    "order": [ 0, 'asc' ],
     "scrollY":        "400px",
     "scrollCollapse": true,
     "paging":         false,

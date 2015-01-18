@@ -467,50 +467,64 @@ table.tableSection th, table.tableSection td {
 
 
 .panel#all .panel-heading {
-  background-color: #363738;
+  border: 1px solid #363738;
+  border-left: 10px solid #363738;
 }
 .panel#vegetables .panel-heading {
-  background-color: #2ECC40;
+  border: 1px solid #2ECC40;
+  border-left: 10px solid #2ECC40;
 }
 
 .panel#fruit .panel-heading {
-  background-color: #01FF70;
+  border: 1px solid #01FF70;
+  border-left: 10px solid #01FF70;
 }
 .panel#meat_fish_seafood_alts .panel-heading {
-  background-color: #FF4136;
+  border: 1px solid #FF4136;
+  border-left: 10px solid #FF4136;
 }
 .panel#breads_cereals .panel-heading {
-  background-color: #FFDC00;
+  border: 1px solid #FFDC00;
+  border-left: 10px solid #FFDC00;
 }
 .panel#pasta_rice_grains .panel-heading {
-  background-color: #2851a5;
+  border: 1px solid #2851a5;
+  border-left: 10px solid #2851a5;
 }
 .panel#dairy .panel-heading {
-  background-color: #ff9292;
+  border: 1px solid #ff9292;
+  border-left: 10px solid #ff9292;
 }
 .panel#fats_oils .panel-heading {
-  background-color: #ff992c;
+  border: 1px solid#ff992c;
+  border-left: 10px solid#ff992c;
 }
 .panel#sauces_dressings_condiments .panel-heading {
-  background-color: #88e6ff;
+  border: 1px solid #88e6ff;
+  border-left: 10px solid #88e6ff;
 }
 .panel#cakes_pastries_desserts .panel-heading {
-  background-color: #F012BE;
+  border: 1px solid #F012BE;
+  border-left: 10px solid #F012BE;
 }
 .panel#biscuits_snacks_sweets .panel-heading {
-  background-color: #39CCCC;
+  border: 1px solid #39CCCC;
+  border-left: 10px solid #39CCCC;
 }
 .panel#beverages .panel-heading {
-  background-color: #7FDBFF;
+  border: 1px solid #7FDBFF;
+  border-left: 10px solid #7FDBFF;
 }
 .panel#takeaways_mixed_dishes .panel-heading {
-  background-color: #cbeeff;
+  border: 1px solid #cbeeff;
+  border-left: 10px solid #cbeeff;
 }
 .panel#homemade_recipes_home_dishes .panel-heading {
-  background-color: #AAAAAA;
+  border: 1px solid #AAAAAA;
+  border-left: 10px solid #AAAAAA;
 }
 .panel > a {
-  color: #fff;
+  color: black;
   text-decoration: none;
 }
 
