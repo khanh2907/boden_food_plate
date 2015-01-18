@@ -24,7 +24,6 @@ class FoodDiariesController < ApplicationController
     @hide_layout = true
     @day = params[:day]
     @meals = @food_diary.meals.where(day: @day.to_i)
-    @default_plates = ['Breakfast', 'Snack', 'Lunch', 'Snack', 'Supper', 'Dinner']
     render :show
   end
 
@@ -32,10 +31,9 @@ class FoodDiariesController < ApplicationController
     @hide_nav = true
     meals_json = JSON.parse(params[:meals_json])
 
-    Meal.delete_all("food_diary_id = #{@food_diary.id} AND day = #{params[:day].to_i}")
-
     meals_json.each do |meal_json|
-      meal = Meal.new(name: meal_json["name"], day: meal_json["day"], food_diary_id: meal_json["food_diary_id"])
+      meal = Meal.find_by(name: meal_json["name"], day: meal_json["day"], food_diary_id: meal_json["food_diary_id"])
+      meal.foods.delete_all
       meal_json["foods"].each do |food_id|
         food = Food.find(food_id)
         meal.foods << food unless food.nil?
@@ -88,6 +86,12 @@ class FoodDiariesController < ApplicationController
 
     @food_diary.participant = participant
     @food_diary.save
+    default_plates = ['Breakfast', 'Snack', 'Lunch', 'Snack', 'Supper', 'Dinner']
+    (1..3).each do |day|
+      default_plates.each do |plate|
+        @food_diary.meals.create(day: day, name: plate)
+      end
+    end
     redirect_to "#{food_diary_path(@food_diary)}/1"
   end
 
