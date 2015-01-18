@@ -27,6 +27,7 @@ gem 'twitter-typeahead-rails'
 gem 'select2-rails'
 gem 'pace-rails'
 gem 'highcharts-rails'
+gem 'lazyload-rails'
 
 
 group :development do
