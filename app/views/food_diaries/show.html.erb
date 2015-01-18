@@ -1,12 +1,12 @@
 <div>
   <%= render 'food_search' %>
 
-  <div class="col-md-9 plates-div" style="display:none;">
+  <div class="col-md-8 plates-div" style="display:none;">
     <div class="tip alert alert-warning">
       <%= GENERIC_TIPS[(rand() * GENERIC_TIPS.size).to_i] %>
     </div>
 
-    <div class="col-md-8 col-md-offset-2 no-plates-div" style="display:none;">
+    <div class="col-md-8 no-plates-div" style="display:none;">
       <div class="form-box text-center">
         <h2>Uh oh! You have no plates!</h2>
         <a class="btn btn-primary btn-lg new-meal-btn">New Meal</a>
@@ -16,7 +16,7 @@
       </div>
     </div>
     <div class="row p-row">
-      <div class="col-md-6 col-md-offset-1">
+      <div class="col-md-8">
         <bplate class="droppable">
           <% @meals.each_with_index do |meal, index| %>
             <div class="food-goes-here <%= 'current-plate' if index==0 %> <%= 'hidden' unless index==0 %>" data-meal-id="<%= meal.id %>" id="<%=index%>">
@@ -67,7 +67,6 @@
       </div>
       <div class="buttons text-center">
         <a class="btn btn-warning" id="empty-plate-btn"><%= fa_icon "ban" %> Empty Plate</a>
-        <a class="btn btn-danger" id="delete-meal-btn"><%= fa_icon "trash-o" %> Delete Meal</a>
       </div>
     </div>
     <div>
