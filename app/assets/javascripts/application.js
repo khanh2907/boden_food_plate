@@ -43,7 +43,6 @@ function addFoodToPlate(foodElement) {
     var servingSize = foodElement.data('serving-size');
     var swapTip = foodElement.data('swap-tip');
     $('.current-plate').append(foodElement.clone()
-        .find('img')
         .attr('height', '100')
         .attr('width', '100')
         .addClass('food-on-plate img-circle')

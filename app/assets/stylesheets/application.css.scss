@@ -335,6 +335,10 @@ bplate {
   z-index: 9001;
 }
 
+.draggable img {
+  z-index: 99999999;
+}
+
 .item {
   z-index: 10000;
 }
@@ -512,4 +516,8 @@ table.tableSection th, table.tableSection td {
 
 .dataTables_filter {
   margin-left: 15px;
+}
+
+.dataTables_scroll {
+  overflow-x: hidden;
 }

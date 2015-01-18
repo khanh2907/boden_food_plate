@@ -7,15 +7,15 @@
     <% @category.foods.each do |food|%>
     <tr>
       <td>
-        <div class="draggable" data-food-id="<%= food.id %>" data-food-name="<%= food.name.gsub(/[,](\S)/) { ", #{$1}" } %>" data-serving-size="<%= food.serving_size %>" data-swap-tip="<%= food.swap_tip %>">
-          <div class="col-md-4">
+        <div>
+          <div class="col-md-5">
           <% unless food.image_path.nil? %>
-            <img class="lazy"  data-original="<%= food.image_path %>" width="50"/>
+            <img class="lazy draggable" data-food-id="<%= food.id %>" data-original="<%= food.image_path %>" width="75" data-food-name="<%= food.name.gsub(/[,](\S)/) { ", #{$1}" } %>" data-serving-size="<%= food.serving_size %>" data-swap-tip="<%= food.swap_tip %>"/>
           <% else %>
-            <img class="lazy"  data-original="/tmp-foods/<%= (0..4).to_a.sample %>.png" height="50"/>
+            <img class="lazy draggable"  data-food-id="<%= food.id %>" data-original="/tmp-foods/<%= (0..4).to_a.sample %>.png" height="75" data-food-name="<%= food.name.gsub(/[,](\S)/) { ", #{$1}" } %>" data-serving-size="<%= food.serving_size %>" data-swap-tip="<%= food.swap_tip %>"/>
           <% end %>
           </div>
-          <div class="col-md-8">
+          <div class="col-md-7">
             <div class="row">
               <%= food.name.gsub(/[,](\S)/) { ", #{$1}" } %>
             </div>
@@ -43,6 +43,7 @@
     "scrollY":        "400px",
     "scrollCollapse": true,
     "paging":         false,
+    "bInfo": false,
     fnDrawCallback: function() {
       // lazy loading for food images
       table.find('.lazy:not(.loaded)').lazyload({
@@ -56,6 +57,9 @@
       // set draggable
       table.find('.lazy:not(.loaded)').each(function() {
         $(this).draggable({
+          appendTo: 'body',
+          containment: 'window',
+          scroll: false,
           revert: "invalid",
           helper: "clone",
           cursor: "move"
