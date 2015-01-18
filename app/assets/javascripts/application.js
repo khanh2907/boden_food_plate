@@ -97,11 +97,6 @@ function applyPlateOnClick() {
     })
 }
 
-function nextPlate() {
-    var nextPlateId = parseInt($('plate.strobe').attr('id')) + 1;
-    togglePlates(nextPlateId);
-}
-
 function togglePlates(id) {
     $('.strobe').removeClass('strobe');
     $('.current-plate-details').removeClass('current-plate-details').addClass('hidden');
