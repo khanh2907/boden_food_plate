@@ -29,6 +29,9 @@ gem 'pace-rails'
 gem 'highcharts-rails'
 gem 'lazyload-rails'
 
+group :production do
+  gem 'therubyracer'
+end
 
 group :development do
   gem 'better_errors'
