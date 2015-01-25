@@ -19,12 +19,13 @@
       <div class="col-md-8">
         <bplate class="droppable">
           <% @meals.each_with_index do |meal, index| %>
+          <% food_size = meal.foods.count > 9 ? 75 : 100%>
             <div class="food-goes-here <%= 'current-plate' if index==0 %> <%= 'hidden' unless index==0 %>" data-meal-id="<%= meal.id %>" id="<%=index%>">
             <% meal.foods.each do |food|%>
                 <% unless food.image_path.nil? %>
-                  <img src="<%= food.image_path %>" class="food-on-plate img-circle" height="100" width="100" id="<%= food.id %>" data-toggle="tooltip" data-placement="top" title="<%= food.name %>"/>
+                  <img src="<%= food.image_path %>" class="food-on-plate img-circle" height="<%= food_size %>" width="<%= food_size %>" id="<%= food.id %>" data-toggle="tooltip" data-placement="top" title="<%= food.name %>"/>
                 <% else %>
-                  <img src="/tmp-foods/<%= (0..4).to_a.sample %>.png" class="food-on-plate" height="100" id="<%= food.id %>" data-toggle="tooltip" data-placement="top" title="<%= food.name %>"/>
+                  <img src="/tmp-foods/<%= (0..4).to_a.sample %>.png" class="food-on-plate" height="<%= food_size %>" id="<%= food.id %>" data-toggle="tooltip" data-placement="top" title="<%= food.name %>"/>
                 <% end %>
             <% end %>
             </div>

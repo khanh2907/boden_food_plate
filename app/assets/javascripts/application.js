@@ -42,9 +42,20 @@ function addFoodToPlate(foodElement) {
     var foodName = foodElement.data('food-name');
     var servingSize = foodElement.data('serving-size');
     var swapTip = foodElement.data('swap-tip');
+
+    var foodCounter = parseInt($('.strobe .food-counter').html());
+
+    var foodSize = 100;
+    if (foodCounter > 8) {
+        foodSize = 75;
+    }
+
+    $('.current-plate .food-on-plate').attr('height', foodSize);
+    $('.current-plate .food-on-plate').attr('width', foodSize);
+
     $('.current-plate').append(foodElement.clone()
-        .attr('height', '100')
-        .attr('width', '100')
+        .attr('height', foodSize)
+        .attr('width', foodSize)
         .addClass('food-on-plate img-circle')
         .attr('data-toggle', 'tooltip')
         .attr('data-placement', 'top')
@@ -64,7 +75,6 @@ function addFoodToPlate(foodElement) {
         $('.tip').html(swapTip);
     }
 }
-
 
 function setDrag(obj) {
     obj.draggable({
@@ -128,6 +138,13 @@ function removeFood(food) {
         $('.current-plate-details .delete-after-first').show();
     }
     updateFoodCounter();
+    var foodCounter = parseInt($('.strobe .food-counter').html());
+
+    if (foodCounter < 10) {
+        foodSize = 100;
+        $('.current-plate .food-on-plate').attr('height', foodSize);
+        $('.current-plate .food-on-plate').attr('width', foodSize);
+    }
 
     $('.tooltip.in').hide();
 }
