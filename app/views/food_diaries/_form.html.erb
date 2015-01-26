@@ -18,6 +18,10 @@
         <%= p.select :gender, Participant.genders.keys.map {|gender| [gender.titleize,gender]}, {}, { :class => 'form-control', :required => true }%>
       </p>
       <p>
+        <%= f.label :study %>
+        <%= f.text_field :study, class: 'form-control', :required => true %>
+      </p>
+      <p>
         <%= p.label :group %>
         <%= p.text_field :group, class: 'form-control', :required => true %>
       </p>

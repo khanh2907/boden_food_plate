@@ -5,14 +5,14 @@
         Food Diaries
         <div class="btn-group pull-right" role="group">
           <button type="button" class="btn btn-default dropdown-toggle" <%= 'disabled' if @food_diaries.empty? %> data-toggle="dropdown" aria-expanded="false">
-            <%= fa_icon "download" %> Export Study Group
+            <%= fa_icon "download" %> Export Study
             <span class="caret"></span>
           </button>
           <ul class="dropdown-menu" role="menu">
-            <% @groups.each do |group| %>
-              <% unless group.nil? %>
+            <% @studies.each do |study| %>
+              <% unless study.nil? %>
                 <li>
-                  <%= link_to group, export_group_path(:group_name => group, :format => 'xls')%>
+                  <%= link_to study, export_study_path(:study_name => study, :format => 'xls')%>
                 </li>
               <% end %>
             <% end %>
@@ -31,7 +31,8 @@
       <table class="table table-striped" id="food-diary-table">
         <thead>
         <th>Participant ID</th>
-        <th>Study Group</th>
+        <th>Study</th>
+        <th>Intervention Group</th>
         <th>Visit</th>
         <th>Date</th>
         <th></th>
@@ -40,6 +41,7 @@
         <% @food_diaries.each do |fd| %>
           <tr>
             <td><%= fd.participant.pid %></td>
+            <td><%= fd.study %></td>
             <td><%= fd.participant.group %></td>
             <td><%= fd.visit %></td>
             <td><%= fd.created_at.localtime.strftime('%d/%m/%Y %l:%M %p') %></td>
