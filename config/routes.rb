@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
   get 'guide' => 'visitors#guide', :as => 'guide'
-  get 'food_diaries/export' => 'food_diaries#export', :as=> 'food_diaries_export'
+  get 'food_diaries/export_group/:group_name' => 'food_diaries#export_group', :as => 'export_group'
   resources :food_diaries
 
   get 'food_diaries/:id/:day' => 'food_diaries#day', :as => 'fd_day'

@@ -7,11 +7,20 @@ class FoodDiariesController < ApplicationController
 
   def index
     @food_diaries = FoodDiary.all
+    @groups = Participant.all.distinct.pluck(:group)
 
     respond_to do |format|
       format.html
       format.csv {send_data generate_totals_csv, :filename => "boden_food_diaries_#{DateTime.now.strftime('%d%m%Y')}.csv"}
       format.xls {send_data generate_totals_csv(col_sep: "\t"), :filename => "boden_food_diaries_#{DateTime.now.strftime('%d%m%Y')}.xls"}
+    end
+  end
+
+  def export_group
+    group_name = params[:group_name]
+    respond_to do |format|
+      format.csv {send_data generate_totals_csv_by_group(group_name), :filename => "#{group_name}_#{DateTime.now.strftime('%d%m%Y')}.csv"}
+      format.xls {send_data generate_totals_csv_by_group(group_name, {col_sep: "\t"}), :filename => "#{group_name}_#{DateTime.now.strftime('%d%m%Y')}.xls"}
     end
   end
 
@@ -118,9 +127,56 @@ class FoodDiariesController < ApplicationController
     params[:food_diary][:participant].permit(:pid, :date_of_birth, :gender, :group)
   end
 
+  def generate_totals_csv_by_group(group_name, options = {})
+    sql = """
+    select parts.pid as participant_id, parts.group, parts.gender, parts.date_of_birth, totals.visit, totals.fd_date as date ,totals.total_energy,
+    totals.total_energy_c,
+    totals.total_protein,
+    totals.total_total_fat,
+    totals.total_saturated_fat,
+    totals.total_cholesterol,
+    totals.total_carbohydrate,
+    totals.total_sugars,
+    totals.total_dietary_fibre,
+    totals.total_sodium from
+    (select s.food_diary_id, s.participant_id, s.visit, s.fd_date, SUM(energy) as total_energy,
+    ROUND(SUM(energy_c)::numeric, 2) as total_energy_c,
+    SUM(protein) as total_protein,
+    SUM(total_fat) as total_total_fat,
+    SUM(saturated_fat) as total_saturated_fat,
+    SUM(cholesterol) as total_cholesterol,
+    SUM(carbohydrate) as total_carbohydrate,
+    SUM(sugars) as total_sugars,
+    SUM(dietary_fibre) as total_dietary_fibre,
+    SUM(sodium) as total_sodium from foods as f
+    right outer join
+      (select food_id, fdm.food_diary_id, fdm.visit, fdm.participant_id, fdm.fd_date from foods_meals as fm
+      right outer join
+        (select m.food_diary_id, fd.visit, fd.participant_id, m.id as meal_id, fd.created_at as fd_date
+        from food_diaries as fd
+        inner join meals as m
+        on m.food_diary_id=fd.id) as fdm
+      on fdm.meal_id = fm.meal_id) as s
+    on f.id = s.food_id group by food_diary_id, visit, participant_id, fd_date) as totals
+    inner join participants as parts on totals.participant_id=parts.id where parts.group = '#{group_name}';
+    """
+
+    totals = ActiveRecord::Base.connection.exec_query(sql).to_hash
+
+    CSV.generate(options) do |csv|
+      csv << totals[0].keys.map!(&:titleize)
+      totals.each do |fd|
+        gender = Participant.genders.select{|key, val| key if val == fd['gender'].to_i }.first[0]
+        fd['gender'] = gender
+        csv << fd.values
+      end
+    end
+
+  end
+
   def generate_totals_csv(options = {})
     sql = '''
-      select parts.pid as participant_id, parts.group, parts.gender, parts.date_of_birth, totals.visit_number, totals.fd_date as date ,totals.total_energy,
+      select parts.pid as participant_id, parts.group, parts.gender, parts.date_of_birth, totals.visit, totals.fd_date as date ,totals.total_energy,
       totals.total_energy_c,
       totals.total_protein,
       totals.total_total_fat,
@@ -130,7 +186,7 @@ class FoodDiariesController < ApplicationController
       totals.total_sugars,
       totals.total_dietary_fibre,
       totals.total_sodium from
-      (select s.food_diary_id, s.participant_id, s.visit_number, s.fd_date, SUM(energy) as total_energy,
+      (select s.food_diary_id, s.participant_id, s.visit, s.fd_date, SUM(energy) as total_energy,
       ROUND(SUM(energy_c)::numeric, 2) as total_energy_c,
       SUM(protein) as total_protein,
       SUM(total_fat) as total_total_fat,
@@ -140,15 +196,15 @@ class FoodDiariesController < ApplicationController
       SUM(sugars) as total_sugars,
       SUM(dietary_fibre) as total_dietary_fibre,
       SUM(sodium) as total_sodium from foods as f
-      inner join
-        (select food_id, fdm.food_diary_id, fdm.visit_number, fdm.participant_id, fdm.fd_date from foods_meals as fm
+      right outer join
+        (select food_id, fdm.food_diary_id, fdm.visit, fdm.participant_id, fdm.fd_date from foods_meals as fm
         right outer join
-          (select m.food_diary_id, fd.visit_number, fd.participant_id, m.id as meal_id, fd.created_at as fd_date
+          (select m.food_diary_id, fd.visit, fd.participant_id, m.id as meal_id, fd.created_at as fd_date
           from food_diaries as fd
           inner join meals as m
           on m.food_diary_id=fd.id) as fdm
         on fdm.meal_id = fm.meal_id) as s
-      on f.id = s.food_id group by food_diary_id, visit_number, participant_id, fd_date) as totals
+      on f.id = s.food_id group by food_diary_id, visit, participant_id, fd_date) as totals
       inner join participants as parts on totals.participant_id=parts.id;
     '''
     totals = ActiveRecord::Base.connection.exec_query(sql).to_hash
