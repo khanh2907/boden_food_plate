@@ -49,6 +49,9 @@ function addFoodToPlate(foodElement) {
     if (foodCounter > 8) {
         foodSize = 75;
     }
+    if (foodCounter > 15) {
+        foodSize = 55;
+    }
 
     $('.current-plate .food-on-plate').attr('height', foodSize);
     $('.current-plate .food-on-plate').attr('width', foodSize);
@@ -140,8 +143,14 @@ function removeFood(food) {
     updateFoodCounter();
     var foodCounter = parseInt($('.strobe .food-counter').html());
 
-    if (foodCounter < 10) {
-        foodSize = 100;
+    if (foodCounter < 17) {
+        if (foodCounter < 17) {
+            foodSize = 75;
+        }
+
+        if (foodCounter < 10) {
+            foodSize = 100;
+        }
         $('.current-plate .food-on-plate').attr('height', foodSize);
         $('.current-plate .food-on-plate').attr('width', foodSize);
     }

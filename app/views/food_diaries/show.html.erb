@@ -20,6 +20,7 @@
         <bplate class="droppable">
           <% @meals.each_with_index do |meal, index| %>
           <% food_size = meal.foods.count > 9 ? 75 : 100%>
+          <% food_size = meal.foods.count > 16 ? 55 : 75%>
             <div class="food-goes-here <%= 'current-plate' if index==0 %> <%= 'hidden' unless index==0 %>" data-meal-id="<%= meal.id %>" id="<%=index%>">
             <% meal.foods.each do |food|%>
                 <% unless food.image_path.nil? %>
