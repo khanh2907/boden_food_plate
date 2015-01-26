@@ -22,12 +22,16 @@
         <%= p.text_field :group, class: 'form-control', :required => true %>
       </p>
     <% end %>
-    <%= f.input :visit_number, as: :select, :collection => (1..100), :input_html => {"data-parsley-min" => '1'} %>
+    <%= f.input :visit, :input_html => {:required => true} %>
   </div>
 
   <div class="form-actions">
     <%= f.button :submit, :class => 'btn btn-primary btn-lg centerize' %>
   </div>
 <% end %>
+
+<script>
+
+</script>
 
 

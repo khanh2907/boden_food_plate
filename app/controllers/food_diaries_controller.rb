@@ -111,7 +111,7 @@ class FoodDiariesController < ApplicationController
   end
 
   def food_diary_params
-    params[:food_diary].permit(:visit_number)
+    params[:food_diary].permit(:visit)
   end
 
   def participant_params

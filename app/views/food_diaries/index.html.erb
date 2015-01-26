@@ -14,7 +14,7 @@
       <table class="table table-striped" id="food-diary-table">
         <thead>
         <th>Participant ID</th>
-        <th>Visit Number</th>
+        <th>Visit</th>
         <th>Date</th>
         <th></th>
         </thead>
@@ -22,7 +22,7 @@
         <% @food_diaries.each do |fd| %>
           <tr>
             <td><%= fd.participant.pid %></td>
-            <td><%= fd.visit_number %></td>
+            <td><%= fd.visit %></td>
             <td><%= fd.created_at.localtime.strftime('%d/%m/%Y %l:%M %p') %></td>
             <td>
               <%= link_to(fd_day_path(fd, 1), :class => 'btn btn-xs btn-primary') do %>
