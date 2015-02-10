@@ -8,12 +8,20 @@ class FoodDiariesController < ApplicationController
   def index
     @food_diaries = FoodDiary.all
     @studies = FoodDiary.all.distinct.pluck(:study)
-
     respond_to do |format|
-      format.html
+      format.html do
+        if session[:management_on]
+          render 'management'
+        end
+      end
       format.csv {send_data generate_totals_csv, :filename => "boden_food_diaries_#{DateTime.now.strftime('%d%m%Y')}.csv"}
       format.xls {send_data generate_totals_csv(col_sep: "\t"), :filename => "boden_food_diaries_#{DateTime.now.strftime('%d%m%Y')}.xls"}
     end
+  end
+
+  def set_management
+    session[:management_on] = session[:management_on].nil? ? 1 : nil
+    redirect_to food_diaries_path
   end
 
   def export_study

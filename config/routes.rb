@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
   get 'guide' => 'visitors#guide', :as => 'guide'
+  get 'manage' => 'food_diaries#set_management', :as => 'set_management'
   get 'food_diaries/export_study/:study_name' => 'food_diaries#export_study', :as => 'export_study'
   resources :food_diaries
 

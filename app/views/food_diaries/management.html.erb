@@ -28,8 +28,26 @@
         <% end %>
       </h3>
 
+      <a class="btn btn-danger"><%= fa_icon "trash" %> Delete Selected</a>
+      <div class="btn-group" role="group">
+        <button type="button" class="btn btn-danger dropdown-toggle" <%= 'disabled' if @food_diaries.empty? or @studies.empty? %> data-toggle="dropdown" aria-expanded="false">
+          <%= fa_icon "trash" %> Delete Study
+          <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" role="menu">
+          <% @studies.each do |study| %>
+            <% unless study.nil? %>
+              <li>
+                <%= link_to study, export_study_path(:study_name => study, :format => 'xls')%>
+              </li>
+            <% end %>
+          <% end %>
+        </ul>
+      </div>
+      <!--add a form here-->
       <table class="table table-striped" id="food-diary-table">
         <thead>
+        <th><input type="checkbox" id="select-all"/></th>
         <th>Participant ID</th>
         <th>Study</th>
         <th>Intervention Group</th>
@@ -40,6 +58,7 @@
         <tbody>
         <% @food_diaries.each do |fd| %>
           <tr>
+            <td><input type="checkbox" class="fd-delete-cb" name="<%= fd.id %>"/></td>
             <td><%= fd.participant.pid %></td>
             <td><%= fd.study %></td>
             <td><%= fd.participant.group %></td>
@@ -51,6 +70,9 @@
               <% end %>
               <%= link_to(food_diary_breakdown_path(fd), :class => 'btn btn-xs btn-success') do %>
                 <%= fa_icon "bar-chart" %> View Breakdown
+              <% end %>
+              <%= link_to fd, :method => :delete, :data => {:confirm => 'Are you sure you want to delete this food diary?'}, :class => 'btn btn-xs btn-danger' do %>
+                <%= fa_icon "trash" %> Delete
               <% end %>
             </td>
           </tr>
@@ -65,10 +87,18 @@
   // Initialise the user table
   $('#food-diary-table').dataTable({
     "aoColumnDefs": [
-      { 'bSortable': false, 'aTargets': [ 5 ] }
+      { 'bSortable': false, 'aTargets': [ 0 ,6 ] }
     ],
-    "order": [[ 4, "asc" ]],
+    "order": [[ 5, "asc" ]],
     "aLengthMenu": [[25, 50, 100, 200, -1], [25, 50, 100, 200, "All"]],
     "iDisplayLength": 25
+  });
+
+  $('#select-all').on('change', function(e) {
+    if (this.checked) {
+      $('.fd-delete-cb').prop('checked', true);
+    } else {
+      $('.fd-delete-cb').prop('checked', false);
+    }
   });
 </script>
