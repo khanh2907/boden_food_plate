@@ -24,6 +24,15 @@ class FoodDiariesController < ApplicationController
     redirect_to food_diaries_path
   end
 
+  def delete_selected
+    delete_food_diaries = params[:delete_food_diaries]
+    unless delete_food_diaries.nil?
+      delete_keys = delete_food_diaries.keys
+      FoodDiary.where(id: delete_keys).delete_all
+    end
+    redirect_to food_diaries_path
+  end
+
   def export_study
     study_name = params[:study_name]
     respond_to do |format|

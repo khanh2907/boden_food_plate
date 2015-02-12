@@ -27,8 +27,8 @@
           <btn class="btn btn-primary pull-right p-index-btn"><%= fa_icon "plus" %> New Food Diary</btn>
         <% end %>
       </h3>
-
-      <a class="btn btn-danger"><%= fa_icon "trash" %> Delete Selected</a>
+      <%= simple_form_for :food_diaries, :url => fd_delete_selected_path do |f| %>
+      <%= f.submit 'Delete Selected', :class => 'btn btn-danger', :data => {:confirm => 'Are you sure you want to delete the selected food diaries?'}%>
       <div class="btn-group" role="group">
         <button type="button" class="btn btn-danger dropdown-toggle" <%= 'disabled' if @food_diaries.empty? or @studies.empty? %> data-toggle="dropdown" aria-expanded="false">
           <%= fa_icon "trash" %> Delete Study
@@ -44,7 +44,7 @@
           <% end %>
         </ul>
       </div>
-      <!--add a form here-->
+
       <table class="table table-striped" id="food-diary-table">
         <thead>
         <th><input type="checkbox" id="select-all"/></th>
@@ -58,7 +58,7 @@
         <tbody>
         <% @food_diaries.each do |fd| %>
           <tr>
-            <td><input type="checkbox" class="fd-delete-cb" name="<%= fd.id %>"/></td>
+            <td><input type="checkbox" class="fd-delete-cb" name="<%= "delete_food_diaries[#{fd.id}]" %>" value="1"/></td>
             <td><%= fd.participant.pid %></td>
             <td><%= fd.study %></td>
             <td><%= fd.participant.group %></td>
@@ -79,6 +79,7 @@
         <% end %>
         </tbody>
       </table>
+      <% end %>
     </div>
   </div>
 </div>

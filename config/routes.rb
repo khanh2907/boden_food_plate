@@ -2,6 +2,7 @@ Rails.application.routes.draw do
   get 'guide' => 'visitors#guide', :as => 'guide'
   get 'manage' => 'food_diaries#set_management', :as => 'set_management'
   get 'food_diaries/export_study/:study_name' => 'food_diaries#export_study', :as => 'export_study'
+  post 'food_diaries/delete_selected' => 'food_diaries#delete_selected', :as => 'fd_delete_selected'
   resources :food_diaries
 
   get 'food_diaries/:id/:day' => 'food_diaries#day', :as => 'fd_day'
