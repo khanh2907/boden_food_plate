@@ -33,6 +33,12 @@ class FoodDiariesController < ApplicationController
     redirect_to food_diaries_path
   end
 
+  def delete_study
+    study_name = params[:study_name]
+    FoodDiary.where(study: study_name).delete_all
+    redirect_to food_diaries_path
+  end
+
   def export_study
     study_name = params[:study_name]
     respond_to do |format|

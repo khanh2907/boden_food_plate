@@ -38,7 +38,7 @@
           <% @studies.each do |study| %>
             <% unless study.nil? %>
               <li>
-                <%= link_to study, export_study_path(:study_name => study, :format => 'xls')%>
+                <%= link_to study, delete_study_path(:study_name => study, :format => 'xls'), :data => {:confirm => "Are you sure you want to delete all food diaries in the study '#{study}'"}%>
               </li>
             <% end %>
           <% end %>
