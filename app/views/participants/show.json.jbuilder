@@ -1,0 +1,1 @@
+json.extract! @participant, :id, :pid, :gender, :group, :date_of_birth_formatted

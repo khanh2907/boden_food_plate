@@ -1,0 +1,53 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md-10 col-md-offset-1">
+      <h3>Participants Management
+        <%= link_to new_participant_path do %>
+          <btn class="btn btn-primary pull-right p-index-btn"><%= fa_icon "plus" %> Add New Participant</btn>
+        <% end %>
+      </h3>
+      <hr>
+      <table class="table table-striped" id="users-table">
+        <thead>
+        <th>Participant ID</th>
+        <th>Gender</th>
+        <th>Date of Birth</th>
+        <th>Group</th>
+        <th></th>
+        </thead>
+        <tbody>
+        <% @participants.each do |participant| %>
+          <tr>
+            <td><%= participant.pid %></td>
+            <td><%= participant.gender %></td>
+            <td><%= participant.date_of_birth %></td>
+            <td><%= participant.group%></td>
+            <td>
+              <%= link_to(edit_participant_path(participant), :class => 'btn btn-xs btn-primary') do %>
+                <%= fa_icon "pencil" %> Edit
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Initialise the user table
+  $('#users-table').dataTable({
+    "aoColumnDefs": [
+      { 'bSortable': false, 'aTargets': [ 4 ] }
+    ],
+    "aLengthMenu": [[25, 50, 100, 200, -1], [25, 50, 100, 200, "All"]],
+    "iDisplayLength": 25
+  });
+
+  // User Role Change AJAX submit
+  $('#user_role').on('change', function(e) {
+    var $form = $(this).parent('form');
+    $.post($form.attr('action'), $form.serialize());
+  })
+</script>

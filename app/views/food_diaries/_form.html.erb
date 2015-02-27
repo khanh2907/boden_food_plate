@@ -4,26 +4,30 @@
   <div class="form-inputs">
     <%= f.simple_fields_for :participant do |p| %>
       <p>
-        <%= p.label 'Participant ID', :pid %>
+        <%= f.label 'Participant ID', :pid %>
         <div id="search-wrapper">
-          <%= p.text_field :pid, class: 'form-control', placeholder: 'nn/aa', :required => true, :pattern => '\d{2}\/[a-zA-Z]{2}', "data-parsley-pattern-message" => 'Incorrect format. It must be Participant ID / First and Last Initials'%>
+          <%= f.select :participant_id, options_from_collection_for_select(Participant.all, :id, :pid), {include_blank: true}, class: 'form-control' %>
+
         </div>
       </p>
-      <p>
-        <%= p.label :date_of_birth %>
-        <%= p.date_field :date_of_birth, class: 'form-control', placeholder: 'DD/MM/YYYY', :required => true%>
-      </p>
-      <p>
-        <%= p.label :gender %>
-        <%= p.select :gender, Participant.genders.keys.map {|gender| [gender.titleize,gender]}, {}, { :class => 'form-control', :required => true }%>
-      </p>
+      <div id="participant-details" style="display:none;">
+        <p>
+          <%= p.label :date_of_birth %>
+          <%= p.text_field :date_of_birth, class: 'form-control', :readonly => true%>
+        </p>
+        <p>
+          <%= p.label :gender %>
+          <%= p.select :gender, Participant.genders.keys.map {|gender| [gender.titleize,gender]}, {}, { :class => 'form-control', :readonly => true }%>
+        </p>
+        <p>
+          <%= p.label :group %>
+          <%= p.text_field :group, class: 'form-control', :readonly => true %>
+        </p>
+      </div>
+      <hr>
       <p>
         <%= f.label :study %>
         <%= f.text_field :study, class: 'form-control', :required => true %>
-      </p>
-      <p>
-        <%= p.label :group %>
-        <%= p.text_field :group, class: 'form-control', :required => true %>
       </p>
     <% end %>
     <%= f.input :visit, :input_html => {:required => true} %>
@@ -35,7 +39,23 @@
 <% end %>
 
 <script>
-
+  $('#food_diary_participant_id').select2();
+  $('#food_diary_participant_id').on("change", function(e) {
+    var id = $('#food_diary_participant_id').val();
+    $.ajax({
+      url: "/participants/"+ id +".json",
+      dataType: 'json',
+      async: false,
+      success: function(data) {
+        console.log(data)
+        $('#food_diary_participant_gender').val(data.gender);
+        $('#food_diary_participant_date_of_birth').val(data.date_of_birth_formatted);
+        console.log($('#food_diary_participant_date_of_birth').val())
+        $('#food_diary_participant_group').val(data.group);
+        $('#participant-details').show();
+      }
+    })
+  });
 </script>
 
 

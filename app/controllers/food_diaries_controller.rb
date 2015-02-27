@@ -109,14 +109,6 @@ class FoodDiariesController < ApplicationController
   def create
     @food_diary = FoodDiary.new(food_diary_params)
 
-    participant = Participant.find_by_pid(participant_params[:pid])
-
-    if participant.nil?
-      participant = Participant.new(participant_params)
-      participant.save!
-    end
-
-    @food_diary.participant = participant
     @food_diary.save
     default_plates = ['Breakfast', 'Snack', 'Lunch', 'Snack', 'Supper', 'Dinner']
     (1..3).each do |day|
@@ -143,7 +135,7 @@ class FoodDiariesController < ApplicationController
   end
 
   def food_diary_params
-    params[:food_diary].permit(:visit, :study)
+    params[:food_diary].permit(:visit, :study, :participant_id)
   end
 
   def participant_params

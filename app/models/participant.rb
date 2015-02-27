@@ -8,4 +8,8 @@ class Participant < ActiveRecord::Base
 
   validates :date_of_birth, presence: true
   validates :gender, presence: true
+
+  def date_of_birth_formatted
+    date_of_birth.strftime('%d/%m/%Y')
+  end
 end
