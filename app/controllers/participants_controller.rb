@@ -2,10 +2,6 @@ class ParticipantsController < ApplicationController
   before_filter :authenticate_user!
   after_action :verify_authorized
 
-  # TODO: authorization
-  # TODO: Interface for participants -> seperated from the admin interface
-
-
   respond_to :html, :json
 
   def index

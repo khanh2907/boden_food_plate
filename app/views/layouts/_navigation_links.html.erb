@@ -6,4 +6,8 @@
   <li><%= link_to 'Guide', guide_path %></li>
 <% end %>
 
+<% if participant_signed_in? %>
+  <li><%= link_to 'Dashboard', participants_mode_dashboard_path %></li>
+<% end %>
+
 

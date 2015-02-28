@@ -1,15 +1,28 @@
-<h2>Log in</h2>
-
-<%= simple_form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
-  <div class="form-inputs">
-    <%= f.input :email, required: false, autofocus: true %>
-    <%= f.input :password, required: false %>
-    <%= f.input :remember_me, as: :boolean if devise_mapping.rememberable? %>
+<div class="col-md-4 col-md-offset-4">
+  <div class="form-box sign-in">
+    <div class="avatar"></div>
+    <h3>Sign in to continue</h3>
+    <%= form_for(resource, :as => resource_name, :url => session_path(resource_name), :html => { :role => 'form', :data => {:validate => 'parsley'}}) do |f| %>
+      <%= devise_error_messages! %>
+      <div class="form-group">
+        <%= f.text_field :login, :autofocus => true, class: 'form-control', placeholder: 'Participant ID', :required => true %>
+      </div>
+      <div class="form-group">
+        <%= f.password_field :password, class: 'form-control', placeholder: 'Password', :required => true %>
+      </div>
+      <% if devise_mapping.rememberable? -%>
+        <div class="checkbox" style="width:150px">
+          <label>
+            <%= f.check_box :remember_me %> Remember me
+          </label>
+        </div>
+      <% end -%>
+      <%= f.submit 'Sign in', :class => 'btn btn-primary btn-lg centerize' %>
+    <% end %>
   </div>
-
-  <div class="form-actions">
-    <%= f.button :submit, "Log in" %>
+  <div class="sign-in-options">
+    <%= render "participants/shared/links" %>
+    <%= link_to 'Trial Manager Login', new_user_session_path %>
   </div>
-<% end %>
+</div>
 
-<%= render "participants/shared/links" %>
