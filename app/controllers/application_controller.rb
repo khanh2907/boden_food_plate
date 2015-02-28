@@ -6,7 +6,6 @@ class ApplicationController < ActionController::Base
   if Rails.env.development?
     include Pundit
     rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
-
     private
 
     def user_not_authorized
