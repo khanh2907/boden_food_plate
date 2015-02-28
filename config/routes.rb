@@ -13,6 +13,7 @@ Rails.application.routes.draw do
 
   devise_for :participants, :except => [:registration]
   resources :participants
+  get 'participants/:id/resend_invite' => 'participants#resend_invite', :as => 'participant_resend_invite'
 
   get 'search_all' => 'food_diaries#search_all', :as => 'search_all'
   get 'search_category/:id' => 'food_diaries#search_category', :as => 'search_category'

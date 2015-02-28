@@ -26,6 +26,9 @@
               <%= link_to(edit_participant_path(participant), :class => 'btn btn-xs btn-primary') do %>
                 <%= fa_icon "pencil" %> Edit
               <% end %>
+              <%= link_to(participant_resend_invite_path(participant), :class => 'btn btn-xs btn-default') do %>
+                <%= fa_icon "envelope-o" %> Resend Invite Mail
+              <% end %>
             </td>
           </tr>
         <% end %>

@@ -51,6 +51,20 @@ class ParticipantsController < ApplicationController
     redirect_to users_path, :notice => "Participant deleted."
   end
 
+  def resend_invite
+    @participant = Participant.find(params[:id])
+    if @participant
+      if !@participant.email.blank?
+        @participant.send_reset_password_instructions
+        redirect_to participants_path, :notice => "An invitation email has been sent to #{@participant.email}."
+      else
+        redirect_to participants_path, :alert => "Participant #{@participant.pid} does not have an email address. Please set an email for this participant and try again."
+      end
+    else
+      redirect_to participants_path, :alert => "Unable to find participant with id #{params[:id]}."
+    end
+  end
+
   private
 
   def secure_params
