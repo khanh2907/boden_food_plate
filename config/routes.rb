@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+
   get 'guide' => 'visitors#guide', :as => 'guide'
   get 'manage' => 'food_diaries#set_management', :as => 'set_management'
 
@@ -10,6 +11,7 @@ Rails.application.routes.draw do
   post 'food_diaries/:id/:day' => 'food_diaries#next_day', :as => 'next_day'
   get 'breakdown/:id/' => 'food_diaries#breakdown', :as => 'food_diary_breakdown'
 
+  devise_for :participants, :except => [:registration]
   resources :participants
 
   get 'search_all' => 'food_diaries#search_all', :as => 'search_all'

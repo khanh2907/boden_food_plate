@@ -2,6 +2,11 @@ class ParticipantsController < ApplicationController
   before_filter :authenticate_user!
   # after_action :verify_authorized
 
+  # TODO: authorization
+  # TODO: scope this model to devise -> invite_token?
+  # TODO: Interface for participants -> seperated from the admin interface
+
+
   respond_to :html, :json
 
   def index
@@ -20,8 +25,11 @@ class ParticipantsController < ApplicationController
   end
 
   def create
-    @participant = Participant.create(secure_params)
-    redirect_to participants_path, :notice => "Participant successfully created."
+    @participant = Participant.new(secure_params)
+    @participant.password = SecureRandom.base64(69)
+    @participant.save
+    @participant.send_reset_password_instructions
+    redirect_to participants_path, :notice => "Participant successfully created. An invitation email has been sent to #{@participant.email}."
   end
 
   def edit
@@ -46,7 +54,7 @@ class ParticipantsController < ApplicationController
   private
 
   def secure_params
-    params.require(:participant).permit(:pid, :gender, :date_of_birth, :group)
+    params.require(:participant).permit(:pid, :gender, :date_of_birth, :group, :email)
   end
 
 end

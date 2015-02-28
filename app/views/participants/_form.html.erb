@@ -20,9 +20,16 @@
       <%= f.label :group %>
       <%= f.text_field :group, class: 'form-control', :required => true %>
     </p>
+    <p>
+      <%= f.label :email %>
+      <%= f.text_field :email, class: 'form-control', placeholder: 'user@domain.com', type: 'email', :required => true%>
+    </p>
   </div>
 
   <div class="form-actions">
+    <% if @participant.new_record? %>
+      <small>Creating a new participant will send an invitation email to the participant. Please ensure that these details are correct before proceeding.</small>
+    <% end %>
     <%= f.button :submit, :class => 'btn btn-primary btn-lg centerize' %>
   </div>
 <% end %>
