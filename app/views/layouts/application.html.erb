@@ -10,7 +10,7 @@
   <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
   <link rel="icon" href="/favicon.ico" type="image/x-icon">
 </head>
-<body id="<%= 'landing' if params[:controller] == 'visitors' %>">
+<body id="<%= 'landing' if params[:controller] == 'visitors' && params[:action] == 'index' %>">
 <% unless @hide_layout %>
   <div id="wrap">
     <%= render 'layouts/navigation' unless @hide_nav %>

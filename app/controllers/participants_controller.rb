@@ -32,7 +32,7 @@ class ParticipantsController < ApplicationController
       @participant.send_reset_password_instructions
       redirect_to participants_path, :notice => "Participant successfully created. An invitation email has been sent to #{@participant.email}."
     else
-      redirect_to participants_path, :notice => "Participant successfully created. (The invitation email was not sent because no email address was specified."
+      redirect_to participants_path, :notice => "Participant successfully created. (The invitation email was not sent because no email address was specified.)"
     end
   end
 

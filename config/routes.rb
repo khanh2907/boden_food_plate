@@ -32,7 +32,7 @@ Rails.application.routes.draw do
 
   get 'food_diary/:id/:day' => 'participants_mode/food_diaries#day', :as => 'participants_mode_fd_day'
   post 'food_diary/:id/:day' => 'participants_mode/food_diaries#next_day', :as => 'participants_mode_next_day'
-  get 'food_diary/breakdown/:id/' => 'participants_mode/food_diaries#breakdown', :as => 'participants_mode_food_diary_breakdown'
+  get 'fbreakdown/:id/' => 'participants_mode/food_diaries#breakdown', :as => 'participants_mode_food_diary_breakdown'
 
 end
 

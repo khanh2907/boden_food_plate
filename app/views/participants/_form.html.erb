@@ -22,13 +22,13 @@
     </p>
     <p>
       <%= f.label :email %>
-      <%= f.text_field :email, class: 'form-control', placeholder: 'user@domain.com', type: 'email', :required => true%>
+      <%= f.text_field :email, class: 'form-control', placeholder: 'user@domain.com', type: 'email'%>
     </p>
   </div>
 
   <div class="form-actions">
     <% if @participant.new_record? %>
-      <small>Creating a new participant will send an invitation email to the participant. Please ensure that these details are correct before proceeding.</small>
+      <small>Creating a new participant will send an invitation email to the participant if you have entered an email address. Please ensure that these details are correct before proceeding.</small>
     <% end %>
     <%= f.button :submit, :class => 'btn btn-primary btn-lg centerize' %>
   </div>

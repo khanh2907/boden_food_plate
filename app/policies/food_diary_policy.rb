@@ -57,4 +57,8 @@ class FoodDiaryPolicy
     @food_diary.participant == @current_participant
   end
 
+  def breakdown?
+    return true if @current_user
+    @food_diary.participant == @current_participant
+  end
 end

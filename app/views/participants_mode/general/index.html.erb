@@ -1,7 +1,101 @@
-<h2>Welcome back <%= current_participant.pid %></h2>
+<div class="container">
+  <div class="row">
+    <div class="col-md-6 col-md-offset-3">
+      <div class="form-box" style="min-height: 285px;">
+        <h2 class="text-center">Your Details</h2>
 
-<p>Click here to complete your food diary.</p>
+        <div>
+          <p>
+            <strong>Participant ID:</strong> <%= current_participant.pid %>
+          </p>
+          <p>
+            <strong>Gender:</strong> <%= current_participant.gender %>
+          </p>
+          <p>
+            <strong>Date of Birth:</strong> <%= current_participant.date_of_birth_formatted %>
+          </p>
+          <p>
+            <strong>Group:</strong> <%= current_participant.group %>
+          </p>
+          <p>
+            <strong>Email Address:</strong> <%= current_participant.email %>
+          </p>
+          <small>If there are any errors in these details please contact the trial manager.</small>
+        </div>
+      </div>
+    </div>
+  </div>
 
-<div>
-  put current fd here
+  <div class="row">
+    <div class="col-md-6">
+      <div class="form-box" style="min-height: 320px;">
+        <h2 class="text-center">Latest Food Diary</h2>
+        <% current_fd = current_participant.food_diaries.last%>
+        <div class="text-center">
+          <p>
+            <strong>Date:</strong> <%= current_fd.created_at.localtime.strftime('%d/%m/%Y')%>
+          </p>
+          <p>
+            <strong>Study:</strong> <%= current_fd.study %>
+          </p>
+          <p>
+            <strong>Visit:</strong> <%= current_fd.visit%>
+          </p>
+        </div>
+        <div class="text-center" style="margin-top: 35px;">
+          <%= link_to participants_mode_fd_day_url(id: current_fd.id, day:1), class: 'btn btn-lg btn-primary' do %>
+            <%= fa_icon "pencil" %> Update Food Diary
+          <% end %>
+
+          <%= link_to participants_mode_food_diary_breakdown_path(current_fd), class: 'btn btn-lg btn-success' do %>
+            <%= fa_icon "bar-chart" %> View Breakdown
+          <% end %>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="form-box" style="min-height: 320px;">
+        <h2 class="text-center">Previous Entries</h2>
+        <div>
+          <small></small>
+          <table class="table table-striped" id="previous-entries">
+            <thead>
+              <th>Date</th>
+              <th>Study</th>
+              <th>Visit</th>
+              <th></th>
+            </thead>
+            <tbody>
+              <% @food_diaries.each do |fd| %>
+                <tr>
+                  <td data-order="<%= fd.created_at.to_time.to_i %>"><%= fd.created_at.localtime.strftime('%d/%m/%Y') %></td>
+                  <td><%= fd.study %></td>
+                  <td><%= fd.visit %></td>
+                  <td>
+                    <%= link_to(participants_mode_food_diary_breakdown_path(fd), :class => 'btn btn-xs btn-success') do %>
+                      <%= fa_icon "bar-chart" %> View Breakdown
+                    <% end %>
+                  </td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
+
+<script>
+  $('#previous-entries').dataTable({
+    "aoColumnDefs": [
+      { 'bSortable': false, 'aTargets': [ 3 ] }
+    ],
+    "order": [[ 0, "asc" ]],
+    "bFilter" : false,
+    "bLengthChange": false,
+    "iDisplayLength": 3,
+    "bInfo": false,
+    "sDom": '<"row view-filter"<"col-sm-12"<"pull-left"l><"pull-right"f><"clearfix">>>t<"row view-pager"<"col-sm-12"<"text-center"ip>>>'
+  });
+</script>

@@ -34,4 +34,8 @@ class ParticipantPolicy
     @current_user.admin?
   end
 
+  def resend_invite?
+    @current_user.admin?
+  end
+
 end
