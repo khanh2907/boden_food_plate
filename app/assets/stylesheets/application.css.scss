@@ -37,6 +37,14 @@ body {
   height: 100%;
 }
 
+body#landing {
+  background: url(/root_bg.png) no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+
 .container.main {
   margin-bottom: 20px;
 }
@@ -45,7 +53,7 @@ body {
   min-height: 100%;
   height: auto !important;
   height: 100%;
-  margin: 0 auto -80px;
+  margin: 0 auto -100px;
 }
 
 .well, .btn, .form-control{
@@ -63,7 +71,7 @@ body {
   padding: 15px 20px 15px;
   margin-right: 70px;
   margin-left: 0px;
-  background: transparent url(/logo.png) no-repeat left 5px;
+  background: transparent url(/plate-brand.png) no-repeat left 4px;
   display: inline-block;
   text-indent: 0%;
   white-space: nowrap;
@@ -79,7 +87,7 @@ body {
 
 .navbar {
   background-color: #12416c;
-  border-color: #2e6da4;
+  border-color: #060c22;
   border-radius: 0;
 }
 
@@ -126,7 +134,7 @@ li.form-error {
 //************** LOGIN PAGE *****************//
 
 .avatar {
-  background-image: url(/avatar.png);
+  background-image: url(/plate-md.png);
   background-repeat: no-repeat;
   background-size: 100px 100px;
   margin: 30px auto 10px;
@@ -435,7 +443,7 @@ table.tableSection th, table.tableSection td {
 
 #push,
 #footer {
-  height: 80px;
+  height: 100px;
 }
 #footer {
   text-align: center;

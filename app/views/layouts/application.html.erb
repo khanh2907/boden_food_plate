@@ -10,7 +10,7 @@
   <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
   <link rel="icon" href="/favicon.ico" type="image/x-icon">
 </head>
-<body>
+<body id="<%= 'landing' if params[:controller] == 'visitors' %>">
 <% unless @hide_layout %>
   <div id="wrap">
     <%= render 'layouts/navigation' unless @hide_nav %>
@@ -25,11 +25,12 @@
     </div>
     <div id="push"></div>
   </div>
-  <div id="footer">
+  <div id="footer" style="background-color:#fff;">
     <div class="container">
       <%= image_tag '/boden_logo.jpg', height: 60, class: 'logo' %>
       <%= image_tag '/usyd_logo.jpg', height: 75, class: 'logo' %>
     </div>
+    <small>Developed by Khanh Nguyen <a href="http://au.linkedin.com/in/khanh2907" target="_blank"><%= fa_icon 'linkedin-square' %></a> <a href="https://github.com/khanh2907" target="_blank"><%= fa_icon 'github-square' %></a></small>
   </div>
 <% else %>
   <div style="padding-top: 20px;"></div>
