@@ -3,4 +3,6 @@ class FoodDiary < ActiveRecord::Base
   has_many :meals
 
   validates :visit, presence: true
+
+  attr_accessor :notify_participant
 end

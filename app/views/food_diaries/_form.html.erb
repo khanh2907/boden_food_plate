@@ -23,6 +23,9 @@
           <%= p.label :group %>
           <%= p.text_field :group, class: 'form-control', :readonly => true %>
         </p>
+        <p>
+          <%= f.input :notify_participant, as: :boolean%>
+        </p>
       </div>
       <hr>
       <p>
@@ -47,11 +50,17 @@
       dataType: 'json',
       async: false,
       success: function(data) {
-        console.log(data)
         $('#food_diary_participant_gender').val(data.gender);
         $('#food_diary_participant_date_of_birth').val(data.date_of_birth_formatted);
-        console.log($('#food_diary_participant_date_of_birth').val())
         $('#food_diary_participant_group').val(data.group);
+
+        if (data.email == '') {
+          $('#food_diary_notify_participant').prop('checked', false);
+          $('#food_diary_notify_participant').prop('disabled', true);
+        } else {
+          $('#food_diary_notify_participant').prop('disabled', false);
+        }
+
         $('#participant-details').show();
       }
     })

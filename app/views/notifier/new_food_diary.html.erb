@@ -1,0 +1,8 @@
+<p>Greetings from the Boden Food Plate Team!</p>
+
+<p>A new food diary has been made for you.</p>
+
+<p>Your login will be: <%= @participant.pid %></p>
+<p><%= link_to 'Please click here to fill it out.', participants_mode_fd_day_url(id: @food_diary.id, day:1) %></p>
+
+<p>If you didn't request this, please ignore this email.</p>

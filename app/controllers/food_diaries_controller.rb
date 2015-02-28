@@ -106,6 +106,10 @@ class FoodDiariesController < ApplicationController
         @food_diary.meals.create(day: day, name: plate)
       end
     end
+
+    if (food_diary_params[:notify_participant].to_i == 1)
+      Notifier.new_food_diary(@food_diary.participant, @food_diary).deliver
+    end
     redirect_to "#{food_diary_path(@food_diary)}/1"
   end
 
@@ -125,7 +129,7 @@ class FoodDiariesController < ApplicationController
   end
 
   def food_diary_params
-    params[:food_diary].permit(:visit, :study, :participant_id)
+    params[:food_diary].permit(:visit, :study, :participant_id, :notify_participant)
   end
 
   def participant_params
