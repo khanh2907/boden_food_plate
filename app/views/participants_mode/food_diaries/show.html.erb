@@ -1,0 +1,268 @@
+<div>
+  <%= render 'food_search' %>
+
+  <div class="col-md-8 plates-div" style="display:none;">
+    <div class="tip alert alert-warning">
+      <%= GENERIC_TIPS[(rand() * GENERIC_TIPS.size).to_i] %>
+    </div>
+
+    <div class="col-md-8 no-plates-div" style="display:none;">
+      <div class="form-box text-center">
+        <h2>Uh oh! You have no plates!</h2>
+        <a class="btn btn-primary btn-lg new-meal-btn">New Meal</a>
+        <br>
+        <h4>Click this button to create a new meal.</h4>
+        <a></a>
+      </div>
+    </div>
+    <div class="row p-row">
+      <div class="col-md-8">
+        <bplate class="droppable">
+          <% @meals.each_with_index do |meal, index| %>
+          <% food_size = meal.foods.count > 9 ? 75 : 100%>
+          <% food_size = meal.foods.count > 16 ? 55 : 75%>
+            <div class="food-goes-here <%= 'current-plate' if index==0 %> <%= 'hidden' unless index==0 %>" data-meal-id="<%= meal.id %>" id="<%=index%>">
+            <% meal.foods.each do |food|%>
+                <% unless food.image_path.nil? %>
+                  <img src="<%= food.image_path %>" class="food-on-plate img-circle" height="<%= food_size %>" width="<%= food_size %>" id="<%= food.id %>" data-toggle="tooltip" data-placement="top" title="<%= food.name %>"/>
+                <% else %>
+                  <img src="/tmp-foods/<%= (0..4).to_a.sample %>.png" class="food-on-plate" height="<%= food_size %>" id="<%= food.id %>" data-toggle="tooltip" data-placement="top" title="<%= food.name %>"/>
+                <% end %>
+            <% end %>
+            </div>
+          <% end %>
+          <% if @meals.empty? %>
+            <div class="food-goes-here current-plate" id="0"></div>
+            <div class="food-goes-here hidden" id="1"></div>
+            <div class="food-goes-here hidden" id="2"></div>
+            <div class="food-goes-here hidden" id="3"></div>
+            <div class="food-goes-here hidden" id="4"></div>
+            <div class="food-goes-here hidden" id="5"></div>
+          <% end %>
+          </bplate>
+          </div>
+    <div class="plate-details col-md-4 form-box">
+      <h3>Day <%= @day %></h3>
+      <div class="pd-wrapper">
+        <% @meals.each_with_index do |meal, index| %>
+          <div class="plate-detail <%= 'current-plate-details' if index==0 %> <%= 'hidden' unless index==0 %>" id="<%= index %>" data-meal-id="<%= meal.id %>">
+            <input class="form-control meal-name" placeholder="Meal Name" value="<%= meal.name %>"></input>
+            <table class="table tableSection">
+              <thead>
+              <th>Food</th>
+              </thead>
+              <tbody>
+              <tr class="delete-after-first" style="<%= 'display:none;' unless meal.foods.empty? %>">
+                <td>
+                  Nothing has been added yet. You can add food to this meal by dragging and dropping from the search bar.
+                </td>
+              </tr>
+              <% meal.foods.each do |food| %>
+                <tr class="food" data-food-id="<%= food.id %>">
+                  <td><%= food.name %> <small><%= "(#{food.serving_size})" %></small></td>
+                </tr>
+              <%end %>
+              </tbody>
+            </table>
+          </div>
+        <% end %>
+      </div>
+      <div class="buttons text-center">
+        <a class="btn btn-warning" id="empty-plate-btn"><%= fa_icon "ban" %> Empty Plate</a>
+      </div>
+    </div>
+    <div>
+
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="game-wrapper col-md-12">
+      <div class="table-wrapper" style="opacity: 1;">
+        <div class="table">
+          <div class="plates">
+            <% @meals.each_with_index do |meal, index| %>
+              <plate data-meal-id="<%= meal.id %>" class="<%= 'strobe' if index == 0 %>" id="<%=index%>">
+                <div class="food-counter"><%= meal.foods.count %></div>
+                <div class="food-label"><span class="label label-<%= meal_label_color(meal.name) %>"><%= meal.name %></span></div>
+              </plate>
+            <% end %>
+          <div>
+            <a class="btn btn-success btn-lg" id="next-meal-btn">This meal is complete.</a>
+            <%= form_tag(participants_mode_next_day_path(@food_diary, @day.to_i), method: 'post', hidden:true, id: 'day-form' ) do %>
+              <input hidden name="meals_json" id="meals_json"></input>
+              <% if @day.to_i < 3%>
+                <input class="btn btn-success btn-lg next-day-btn" type="submit" value="This day is complete.">
+              <% else %>
+                <input class="btn btn-success btn-lg next-day-btn" type="submit" value="Complete Food Diary">
+              <% end %>
+            <% end %>
+          </div>
+          </div>
+        </div>
+        <div class="table-edge" style="opacity: 1;">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+<script>
+
+  $('[data-toggle="tooltip"]').tooltip()
+
+  onLoadDo();
+
+  function onLoadDo() {
+
+    var plateCounter = $('.plate-detail').length;
+
+    setAllFoodRemove();
+
+    $(".droppable").droppable({
+      accept: '.draggable',
+      drop: function(event, ui) {
+        addFoodToPlate($(ui.draggable));
+      }
+    });
+
+    $('.plates-div').toggle( "slide", {direction: 'right'}, 500);
+
+    $('.food-search-bar').toggle( "slide", {direction: 'left'}, 500);
+
+    applyPlateOnClick();
+
+    $('#next-meal-btn').on('click', function(e) {
+      var result = confirm("Are you sure this meal is complete?");
+      if (result) {
+        var nextPlateId = parseInt($('plate.strobe').attr('id')) + 1;
+        togglePlates(nextPlateId);
+      }
+    })
+
+    $('.new-meal-btn').on('click', function(e) {
+      var id = plateCounter;
+      $('.strobe').removeClass('strobe');
+      $('.plates').append('<plate id="'+ id +'" class="strobe"><div class="food-counter">0</div><div class="food-label"><span class="label label-default">Meal #'+ (id+1) + '</span></div></plate>');
+
+      $('.current-plate').removeClass('current-plate').addClass('hidden');
+      $('bplate').append('<div class="food-goes-here current-plate" id="'+ id +'"></div>');
+
+      var html = '<div class="plate-detail current-plate-details" id="'+ id +'">' +
+          '<input class="form-control meal-name" placeholder="Meal Name" value="Meal #'+ (id+1) + '"></input>' +
+          '<table class="table tableSection">' +
+          '<thead>' +
+          '<th>Food</th>' +
+          '</thead>' +
+          '<tbody>' +
+          '<tr class="delete-after-first">' +
+          '<td>' +
+          'Nothing has been added yet. You can add food to this meal by dragging and dropping from the search bar.' +
+          '</td>' +
+          '</tr>' +
+          '</tbody>' +
+          '</table>' +
+          '</div>'
+
+      $('.current-plate-details').removeClass('current-plate-details').addClass('hidden');
+      $('.pd-wrapper').append(html);
+      applyPlateOnClick();
+      plateCounter++;
+
+      $('.no-plates-div').hide();
+      $('.p-row').show();
+    });
+
+//    EMPTY PLATE BUTTON
+    $('#empty-plate-btn').on('click', function(e) {
+      var result = confirm("Are you sure you want to empty this plate?");
+      if (result==true) {
+        $('.current-plate').html('');
+        $('.current-plate-details').find('tr.food').remove();
+        $('.current-plate-details .delete-after-first').show();
+        updateFoodCounter();
+      }
+    });
+
+//    DELETE MEAL BUTTON
+    $('#delete-meal-btn').on('click', function(e) {
+
+      var result = confirm("Are you sure you want to delete this meal?");
+      if (result==true) {
+        $('.current-plate').remove();
+        $('.current-plate-details').remove();
+        $('.strobe').remove();
+        var lastId = $('.plate-detail').last().attr('id')
+        togglePlates(lastId);
+
+        if ($('.plate-detail').length < 1) {
+          $('.p-row').hide();
+          $('.no-plates-div').show();
+        }
+      }
+    });
+
+//    Next Day Button
+    $('.next-day-btn').on('click', function(e) {
+      var meals = platesToJson();
+
+      if (meals.length < 1) {
+        alert('Your plates are empty! Please add food to them before proceeding.');
+        e.preventDefault();
+      }
+      else {
+
+        result = confirm("Are you sure that's all for this day?");
+
+        if (result) {
+          $('input#meals_json').val(JSON.stringify(meals));
+          return true;
+        }
+        else e.preventDefault();
+
+      }
+    })
+  }
+
+  function platesToJson() {
+    var plates = [];
+    $('.plate-detail').each(function(index) {
+
+      if ($(this).find('tr.food').length < 1) {
+        return true;
+      }
+
+      var json = {};
+      var mealId = $(this).data('meal-id');
+
+      if (typeof mealId !== 'undefined') {
+        json.meal_id = mealId;
+      }
+
+      var foods = []
+
+      $(this).find('tr.food').each(function() {
+        foods.push($(this).data('food-id'));
+      })
+
+      json.name = $(this).find('input.meal-name').val();
+      json.foods = foods;
+      json.day = <%= @day %>;
+      json.food_diary_id = <%= @food_diary.id %>;
+
+      plates.push(json);
+    })
+    return plates;
+  }
+
+
+  var GENERIC_TIPS = <%= GENERIC_TIPS.to_json.html_safe %>;
+  var TIP_RANDOM_SEED = GENERIC_TIPS.length;
+
+  var intervalID = window.setInterval(changeGenericTip, 60000);
+
+  function changeGenericTip() {
+    var rand = Math.floor(Math.random() * TIP_RANDOM_SEED);
+    $('.tip').html(GENERIC_TIPS[rand]);
+  }
+</script>

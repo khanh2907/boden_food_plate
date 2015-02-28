@@ -82,16 +82,6 @@ class FoodDiariesController < ApplicationController
     end
   end
 
-  def search_all
-    @foods = Food.all
-    render layout: false
-  end
-
-  def search_category
-    @category = FoodCategory.find(params[:id])
-    render layout: false
-  end
-
   def breakdown
     @hide_nav = true
     @participant = @food_diary.participant

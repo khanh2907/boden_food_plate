@@ -15,12 +15,10 @@ Rails.application.routes.draw do
   resources :participants
   get 'participants/:id/resend_invite' => 'participants#resend_invite', :as => 'participant_resend_invite'
 
-  get 'search_all' => 'food_diaries#search_all', :as => 'search_all'
-  get 'search_category/:id' => 'food_diaries#search_category', :as => 'search_category'
+  get 'search_all' => 'search#search_all', :as => 'search_all'
+  get 'search_category/:id' => 'search#search_category', :as => 'search_category'
 
   get 'search/check_participant' => 'search#check_participant'
-
-
 
   devise_for :users
   resources :users
@@ -31,6 +29,10 @@ Rails.application.routes.draw do
   root to: 'visitors#index'
 
   get 'dashboard' => 'participants_mode/general#index', :as => 'participants_mode_dashboard'
+
+  get 'food_diary/:id/:day' => 'participants_mode/food_diaries#day', :as => 'participants_mode_fd_day'
+  post 'food_diary/:id/:day' => 'participants_mode/food_diaries#next_day', :as => 'participants_mode_next_day'
+  get 'food_diary/breakdown/:id/' => 'participants_mode/food_diaries#breakdown', :as => 'participants_mode_food_diary_breakdown'
 
 end
 
