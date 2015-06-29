@@ -56,6 +56,16 @@ class FoodDiariesController < ApplicationController
     @hide_layout = true
     @day = params[:day]
     @meals = @food_diary.meals.where(day: @day.to_i)
+
+    @recent_foods = Set.new
+    @food_diary.participant.food_diaries.last(10).each do |fd|
+      fd.meals.each do |m|
+        m.foods.each do |f|
+          @recent_foods.add f
+        end
+      end
+    end
+
     render :show
   end
 

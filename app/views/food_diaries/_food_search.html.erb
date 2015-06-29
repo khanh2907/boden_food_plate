@@ -1,48 +1,98 @@
 <div class="col-md-4 food-search-bar" style="display:none;">
-  <div class="food-wrapper">
-    <h3>Foods</h3>
+  <h3>Foods</h3>
 
-    <table class="table" id="all">
-      <thead>
-      <th>Food</th>
-      <th></th>
-      </thead>
-      <tbody>
-      <% Food.all.each do |food|%>
-        <tr>
-          <td data-order="<%= food.name %>" data-filter="<%= food.name %>">
-            <div>
-              <div class="col-md-4">
-                <% unless food.image_path.nil? %>
-                  <img class="lazy draggable" data-original="<%= food.image_path %>" width="75" data-food-id="<%= food.id %>" data-food-name="<%= food.name.gsub(/[,](\S)/) { ", #{$1}" } %>" data-serving-size="<%= food.serving_size %>" data-swap-tip="<%= food.swap_tip %>"/>
-                <% else %>
-                  <img class="lazy draggable" data-original="/tmp-foods/<%= (0..4).to_a.sample %>.png" height="75" data-food-id="<%= food.id %>" data-food-name="<%= food.name %>" data-serving-size="<%= food.serving_size %>" data-swap-tip="<%= food.swap_tip %>"/>
-                <% end %>
-              </div>
-              <div class="col-md-8">
-                <div class="row">
-                  <%= food.name.gsub(/[,](\S)/) { ", #{$1}" } %>
+  <!-- Nav tabs -->
+  <ul class="nav nav-tabs" role="tablist">
+    <li role="presentation" class="active"><a href="#search" aria-controls="search" role="tab" data-toggle="tab"><%= fa_icon 'search' %> Search</a></li>
+    <li role="presentation"><a href="#recent" aria-controls="recent" role="tab" data-toggle="tab"><%= fa_icon 'clock-o' %> Recent</a></li>
+  </ul>
+
+  <!-- Tab panes -->
+  <div class="tab-content">
+    <div role="tabpanel" class="tab-pane active" id="search">
+      <div class="food-wrapper">
+
+        <table class="table" id="all">
+          <thead>
+          <th></th>
+          <th></th>
+          </thead>
+          <tbody>
+          <% Food.all.each do |food|%>
+            <tr>
+              <td data-order="<%= food.name %>" data-filter="<%= food.name %>">
+                <div>
+                  <div class="col-md-4">
+                    <% unless food.image_path.nil? %>
+                      <img class="lazy draggable" data-original="<%= food.image_path %>" width="75" data-food-id="<%= food.id %>" data-food-name="<%= food.name.gsub(/[,](\S)/) { ", #{$1}" } %>" data-serving-size="<%= food.serving_size %>" data-swap-tip="<%= food.swap_tip %>"/>
+                    <% else %>
+                      <img class="lazy draggable" data-original="/tmp-foods/<%= (0..4).to_a.sample %>.png" height="75" data-food-id="<%= food.id %>" data-food-name="<%= food.name %>" data-serving-size="<%= food.serving_size %>" data-swap-tip="<%= food.swap_tip %>"/>
+                    <% end %>
+                  </div>
+                  <div class="col-md-8">
+                    <div class="row">
+                      <%= food.name.gsub(/[,](\S)/) { ", #{$1}" } %>
+                    </div>
+                    <div class="row">
+                      <small><%= food.serving_size %></small>
+                    </div>
+                  </div>
                 </div>
-                <div class="row">
-                  <small><%= food.serving_size %></small>
+              </td>
+              <td>
+                <a class="btn btn-default btn-xs add-food-btn" data-food-id="<%= food.id %>"><%= fa_icon 'plus' %></a>
+              </td>
+            </tr>
+          <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div role="tabpanel" class="tab-pane" id="recent">
+      <table class="table" id="recent">
+        <thead>
+        <th></th>
+        <th></th>
+        </thead>
+        <tbody>
+        <% @recent_foods.each do |food|%>
+          <tr>
+            <td data-order="<%= food.name %>" data-filter="<%= food.name %>">
+              <div>
+                <div class="col-md-4">
+                  <% unless food.image_path.nil? %>
+                    <img class="lazy draggable" data-original="<%= food.image_path %>" width="75" data-food-id="<%= food.id %>" data-food-name="<%= food.name.gsub(/[,](\S)/) { ", #{$1}" } %>" data-serving-size="<%= food.serving_size %>" data-swap-tip="<%= food.swap_tip %>"/>
+                  <% else %>
+                    <img class="lazy draggable" data-original="/tmp-foods/<%= (0..4).to_a.sample %>.png" height="75" data-food-id="<%= food.id %>" data-food-name="<%= food.name %>" data-serving-size="<%= food.serving_size %>" data-swap-tip="<%= food.swap_tip %>"/>
+                  <% end %>
+                </div>
+                <div class="col-md-8">
+                  <div class="row">
+                    <%= food.name.gsub(/[,](\S)/) { ", #{$1}" } %>
+                  </div>
+                  <div class="row">
+                    <small><%= food.serving_size %></small>
+                  </div>
                 </div>
               </div>
-            </div>
-          </td>
-          <td>
-            <a class="btn btn-default btn-xs add-food-btn" data-food-id="<%= food.id %>"><%= fa_icon 'plus' %></a>
-          </td>
-        </tr>
-      <% end %>
-      </tbody>
-    </table>
+            </td>
+            <td>
+              <a class="btn btn-default btn-xs add-food-btn" data-food-id="<%= food.id %>"><%= fa_icon 'plus' %></a>
+            </td>
+          </tr>
+        <% end %>
+        </tbody>
+      </table>
+    </div>
   </div>
+
+
 </div>
 
 <script>
-  var table = $('table#all');
-  // Initialise the food table
-  table.dataTable({
+  var searchTable = $('table#all');
+  // Initialise the food search table
+  searchTable.dataTable({
     "order": [ 0, 'asc' ],
     "bSort" : false,
     "scrollY":        "500px",
@@ -52,17 +102,17 @@
     "bInfo": false,
     fnDrawCallback: function() {
       // lazy loading for food images
-      table.find('.lazy:not(.loaded)').lazyload({
+      searchTable.find('.lazy:not(.loaded)').lazyload({
         effect : "fadeIn",
         threshold : 200,
-        container: table.parent()
+        container: searchTable.parent()
       });
 
       // force the first few foods to appear
-      table.find('.lazy:lt(15)').trigger('appear');
+      searchTable.find('.lazy:lt(15)').trigger('appear');
 
       // set draggable
-      table.find('.lazy:not(.loaded)').each(function() {
+      searchTable.find('.lazy:not(.loaded)').each(function() {
         $(this).draggable({
           appendTo: 'body',
           containment: 'window',
@@ -73,7 +123,7 @@
         });
         $(this).addClass('loaded');
       });
-      table.find('.add-food-btn:not(.loaded)').each(function() {
+      searchTable.find('.add-food-btn:not(.loaded)').each(function() {
         var button = $(this)
         button.on('click', function(e) {
           var food = $(this).parent().parent().find('td').find('.draggable')
@@ -87,5 +137,50 @@
 
   $('#all_filter label input').css('width', '200%');
   $('#all_filter label input').attr('placeholder', 'Search for food here...');
+
+  var recentTable = $('table#recent');
+  // Initialise the food search table
+  recentTable.dataTable({
+    "order": [ 0, 'asc' ],
+    "bSort" : false,
+    "scrollY":        "500px",
+    "scrollCollapse": true,
+    "paging":         false,
+    "oLanguage": { "sSearch": "" },
+    "bInfo": false,
+    bFilter: false,
+    fnDrawCallback: function() {
+      // lazy loading for food images
+      recentTable.find('.lazy:not(.loaded)').lazyload({
+        effect : "fadeIn",
+        threshold : 200,
+        container: recentTable.parent()
+      });
+
+      // force the first few foods to appear
+      recentTable.find('.lazy:lt(15)').trigger('appear');
+
+      // set draggable
+      recentTable.find('.lazy:not(.loaded)').each(function() {
+        $(this).draggable({
+          appendTo: 'body',
+          containment: 'window',
+          scroll: false,
+          revert: "invalid",
+          helper: "clone",
+          cursor: "move"
+        });
+        $(this).addClass('loaded');
+      });
+      recentTable.find('.add-food-btn:not(.loaded)').each(function() {
+        var button = $(this)
+        button.on('click', function(e) {
+          var food = $(this).parent().parent().find('td').find('.draggable')
+          addFoodToPlate(food)
+        });
+        button.addClass('loaded')
+      })
+    }
+  }).fnSetFilteringDelay();
 
 </script>
