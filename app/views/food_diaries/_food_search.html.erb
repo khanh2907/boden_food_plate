@@ -1,65 +1,91 @@
 <div class="col-md-4 food-search-bar" style="display:none;">
   <div class="food-wrapper">
     <h3>Foods</h3>
-    <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
-      <div class="panel panel-default" id="all">
-        <a data-toggle="collapse" data-parent="#accordion" href="#collapse-all" aria-expanded="true" aria-controls="collapse-all" data-endpoint="<%= search_all_path %>" id="all">
-          <div class="panel-heading" role="tab" id="heading-all">
-            <h4 class="panel-title">
-              Show All Foods <span class="close-icon pull-right" style="display: none;"><%= fa_icon 'times' %></span>
-            </h4>
-          </div>
-        </a>
-        <div id="collapse-all" class="panel-collapse collapse" role="tabpanel" aria-labelledby=heading-all" data-id="all">
-          <div class="panel-body">
-          </div>
-        </div>
-      </div>
-      <% FoodCategory.all.each_with_index do |fc, index| %>
-      <% food_category_id = fc.name.gsub(' ', '').gsub('&', '').gsub(',','').underscore %>
-      <div class="panel panel-default" id="<%= food_category_id %>">
-        <a data-toggle="collapse" data-parent="#accordion" href="#<%= "collapse-#{index}"%>" aria-expanded="true" aria-controls="<%= "collapse-#{index}"%>" data-endpoint="<%= search_category_path(fc) %>" id="<%= food_category_id %>">
-        <div class="panel-heading" role="tab" id="<%= "heading-#{index}"%>">
-          <h4 class="panel-title">
-            <%= "#{fc.name}" %> <span class="close-icon pull-right" style="display: none;"><%= fa_icon 'times' %></span>
-          </h4>
-        </div>
-          </a>
-        <div id="<%= "collapse-#{index}"%>" class="panel-collapse collapse" role="tabpanel" aria-labelledby="<%= "heading-#{index}"%>" data-id="<%= food_category_id %>">
-          <div class="panel-body">
-          </div>
-        </div>
-      </div>
+
+    <table class="table" id="all">
+      <thead>
+      <th>Food</th>
+      <th></th>
+      </thead>
+      <tbody>
+      <% Food.all.each do |food|%>
+        <tr>
+          <td data-order="<%= food.name %>" data-filter="<%= food.name %>">
+            <div>
+              <div class="col-md-4">
+                <% unless food.image_path.nil? %>
+                  <img class="lazy draggable" data-original="<%= food.image_path %>" width="75" data-food-id="<%= food.id %>" data-food-name="<%= food.name.gsub(/[,](\S)/) { ", #{$1}" } %>" data-serving-size="<%= food.serving_size %>" data-swap-tip="<%= food.swap_tip %>"/>
+                <% else %>
+                  <img class="lazy draggable" data-original="/tmp-foods/<%= (0..4).to_a.sample %>.png" height="75" data-food-id="<%= food.id %>" data-food-name="<%= food.name %>" data-serving-size="<%= food.serving_size %>" data-swap-tip="<%= food.swap_tip %>"/>
+                <% end %>
+              </div>
+              <div class="col-md-8">
+                <div class="row">
+                  <%= food.name.gsub(/[,](\S)/) { ", #{$1}" } %>
+                </div>
+                <div class="row">
+                  <small><%= food.serving_size %></small>
+                </div>
+              </div>
+            </div>
+          </td>
+          <td>
+            <a class="btn btn-default btn-xs add-food-btn" data-food-id="<%= food.id %>"><%= fa_icon 'plus' %></a>
+          </td>
+        </tr>
       <% end %>
-    </div>
+      </tbody>
+    </table>
   </div>
 </div>
 
 <script>
-  $('.panel-collapse').on('show.bs.collapse', function() {
-    var $this = $(this);
-    var fcId = $this.data('id');
+  var table = $('table#all');
+  // Initialise the food table
+  table.dataTable({
+    "order": [ 0, 'asc' ],
+    "bSort" : false,
+    "scrollY":        "500px",
+    "scrollCollapse": true,
+    "paging":         false,
+    "oLanguage": { "sSearch": "" },
+    "bInfo": false,
+    fnDrawCallback: function() {
+      // lazy loading for food images
+      table.find('.lazy:not(.loaded)').lazyload({
+        effect : "fadeIn",
+        threshold : 200,
+        container: table.parent()
+      });
 
-    $this.parent().find('.close-icon').show();
-    $(".panel:not(#"+ fcId +")").hide();
+      // force the first few foods to appear
+      table.find('.lazy:lt(15)').trigger('appear');
 
-    var fcEndpoint = $('a#'+fcId).data('endpoint');
-
-    if (!$this.hasClass('loaded')){
-      $.ajax({
-        url: fcEndpoint,
-        async: false,
-        success: function(data) {
-          $this.html(data);
-          $this.addClass('loaded');
-        }
+      // set draggable
+      table.find('.lazy:not(.loaded)').each(function() {
+        $(this).draggable({
+          appendTo: 'body',
+          containment: 'window',
+          scroll: false,
+          revert: "invalid",
+          helper: "clone",
+          cursor: "move"
+        });
+        $(this).addClass('loaded');
+      });
+      table.find('.add-food-btn:not(.loaded)').each(function() {
+        var button = $(this)
+        button.on('click', function(e) {
+          var food = $(this).parent().parent().find('td').find('.draggable')
+          addFoodToPlate(food)
+        });
+        button.addClass('loaded')
       })
     }
-  });
+  }).fnSetFilteringDelay();
+  $('#all_wrapper').find('.col-xs-6')[0].remove();
 
-  $('.panel-collapse').on('hide.bs.collapse', function() {
-    var fcId = $(this).data('id');
-    $(this).parent().find('.close-icon').hide();
-    $(".panel:not(#"+ fcId +")").show();
-  })
+  $('#all_filter label input').css('width', '200%');
+  $('#all_filter label input').attr('placeholder', 'Search for food here...');
+
 </script>

@@ -31,26 +31,30 @@
       <div class="form-box" style="min-height: 320px;">
         <h2 class="text-center">Latest Food Diary</h2>
         <% current_fd = current_participant.food_diaries.last%>
-        <div class="text-center">
-          <p>
-            <strong>Date:</strong> <%= current_fd.created_at.localtime.strftime('%d/%m/%Y')%>
-          </p>
-          <p>
-            <strong>Study:</strong> <%= current_fd.study %>
-          </p>
-          <p>
-            <strong>Visit:</strong> <%= current_fd.visit%>
-          </p>
-        </div>
-        <div class="text-center" style="margin-top: 35px;">
-          <%= link_to participants_mode_fd_day_url(id: current_fd.id, day:1), class: 'btn btn-lg btn-primary' do %>
-            <%= fa_icon "pencil" %> Update Food Diary
-          <% end %>
+        <% if current_fd.nil? %>
+          <p>You current do not have any food diaries.</p>
+        <% else %>
+          <div class="text-center">
+            <p>
+              <strong>Date:</strong> <%= current_fd.created_at.localtime.strftime('%d/%m/%Y')%>
+            </p>
+            <p>
+              <strong>Study:</strong> <%= current_fd.study %>
+            </p>
+            <p>
+              <strong>Visit:</strong> <%= current_fd.visit%>
+            </p>
+          </div>
+          <div class="text-center" style="margin-top: 35px;">
+            <%= link_to participants_mode_fd_day_url(id: current_fd.id, day:1), class: 'btn btn-lg btn-primary' do %>
+              <%= fa_icon "pencil" %> Update Food Diary
+            <% end %>
 
-          <%= link_to participants_mode_food_diary_breakdown_path(current_fd), class: 'btn btn-lg btn-success' do %>
-            <%= fa_icon "bar-chart" %> View Breakdown
-          <% end %>
-        </div>
+            <%= link_to participants_mode_food_diary_breakdown_path(current_fd), class: 'btn btn-lg btn-success' do %>
+              <%= fa_icon "bar-chart" %> View Breakdown
+            <% end %>
+          </div>
+        <% end %>
       </div>
     </div>
     <div class="col-md-6">
@@ -58,26 +62,26 @@
         <h2 class="text-center">Previous Entries</h2>
         <div>
           <small></small>
-          <table class="table table-striped" id="previous-entries">
+          <table class="table" id="previous-entries">
             <thead>
-              <th>Date</th>
-              <th>Study</th>
-              <th>Visit</th>
-              <th></th>
+            <th>Date</th>
+            <th>Study</th>
+            <th>Visit</th>
+            <th></th>
             </thead>
             <tbody>
-              <% @food_diaries.each do |fd| %>
-                <tr>
-                  <td data-order="<%= fd.created_at.to_time.to_i %>"><%= fd.created_at.localtime.strftime('%d/%m/%Y') %></td>
-                  <td><%= fd.study %></td>
-                  <td><%= fd.visit %></td>
-                  <td>
-                    <%= link_to(participants_mode_food_diary_breakdown_path(fd), :class => 'btn btn-xs btn-success') do %>
-                      <%= fa_icon "bar-chart" %> View Breakdown
-                    <% end %>
-                  </td>
-                </tr>
-              <% end %>
+            <% @food_diaries.each do |fd| %>
+              <tr>
+                <td data-order="<%= fd.created_at.to_time.to_i %>"><%= fd.created_at.localtime.strftime('%d/%m/%Y') %></td>
+                <td><%= fd.study %></td>
+                <td><%= fd.visit %></td>
+                <td>
+                  <%= link_to(participants_mode_food_diary_breakdown_path(fd), :class => 'btn btn-xs btn-success') do %>
+                    <%= fa_icon "bar-chart" %> View Breakdown
+                  <% end %>
+                </td>
+              </tr>
+            <% end %>
             </tbody>
           </table>
         </div>
