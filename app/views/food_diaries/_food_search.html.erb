@@ -34,7 +34,7 @@
                       <%= food.name.gsub(/[,](\S)/) { ", #{$1}" } %>
                     </div>
                     <div class="row">
-                      <small><%= food.serving_size %></small>
+                      <small><%= "#{food.serving_size} (#{food.serving_weight} g)" %></small>
                     </div>
                   </div>
                 </div>
@@ -71,7 +71,7 @@
                     <%= food.name.gsub(/[,](\S)/) { ", #{$1}" } %>
                   </div>
                   <div class="row">
-                    <small><%= food.serving_size %></small>
+                    <small><%= "#{food.serving_size} (#{food.serving_weight} g)" %></small>
                   </div>
                 </div>
               </div>
@@ -181,6 +181,6 @@
         button.addClass('loaded')
       })
     }
-  }).fnSetFilteringDelay();
+  });
 
 </script>
