@@ -9,10 +9,6 @@
     </div>
     </p>
     <p>
-      <%= f.label :date_of_birth %>
-      <%= f.date_field :date_of_birth, class: 'form-control', placeholder: 'DD/MM/YYYY', :required => true%>
-    </p>
-    <p>
       <%= f.label :gender %>
       <%= f.select :gender, Participant.genders.keys.map {|gender| [gender.titleize,gender]}, {}, { :class => 'form-control', :required => true }%>
     </p>
@@ -20,10 +16,12 @@
       <%= f.label :group %>
       <%= f.text_field :group, class: 'form-control', :required => true %>
     </p>
-    <p>
-      <%= f.label :email %>
-      <%= f.text_field :email, class: 'form-control', placeholder: 'user@domain.com', type: 'email'%>
-    </p>
+    <% if @participant.new_record? %>
+      <p>
+        <%= f.label :email %>
+        <%= f.text_field :email, class: 'form-control', placeholder: 'user@domain.com', type: 'email'%>
+      </p>
+    <% end %>
   </div>
 
   <div class="form-actions">

@@ -117,8 +117,8 @@ class FoodDiariesController < ApplicationController
       end
     end
 
-    if (food_diary_params[:notify_participant].to_i == 1)
-      Notifier.new_food_diary(@food_diary.participant, @food_diary).deliver
+    if (params[:food_diary][:participant][:email].present?)
+      Notifier.new_food_diary(@food_diary.participant, @food_diary, params[:food_diary][:participant][:email]).deliver
     end
     redirect_to "#{food_diary_path(@food_diary)}/1"
   end

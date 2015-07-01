@@ -23,10 +23,12 @@ class ParticipantsController < ApplicationController
   end
 
   def create
-    @participant = Participant.new(secure_params)
+    @participant = Participant.new(pid: secure_params[:pid], gender: secure_params[:gender], group: secure_params[:group])
     @participant.password = SecureRandom.base64(69)
     @participant.save
     authorize @participant
+
+    @participant.email = secure_params[:email]
 
     unless @participant.email.blank?
       @participant.send_reset_password_instructions
@@ -62,21 +64,22 @@ class ParticipantsController < ApplicationController
     @participant = Participant.find(params[:id])
     authorize @participant
     if @participant
+      @participant.email = params[:email]
       if !@participant.email.blank?
         @participant.send_reset_password_instructions
-        redirect_to participants_path, :notice => "An invitation email has been sent to #{@participant.email}."
+        render  :text => "An invitation email has been sent to #{@participant.email}."
       else
-        redirect_to participants_path, :alert => "Participant #{@participant.pid} does not have an email address. Please set an email for this participant and try again."
+        render :text=> "Participant #{@participant.pid} does not have an email address. Please set an email for this participant and try again."
       end
     else
-      redirect_to participants_path, :alert => "Unable to find participant with id #{params[:id]}."
+      render :text=> "Unable to find participant with id #{params[:id]}."
     end
   end
 
   private
 
   def secure_params
-    params.require(:participant).permit(:pid, :gender, :date_of_birth, :group, :email)
+    params.require(:participant).permit(:pid, :gender, :email, :group)
   end
 
 end

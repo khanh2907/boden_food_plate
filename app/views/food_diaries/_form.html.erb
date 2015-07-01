@@ -12,10 +12,6 @@
       </p>
       <div id="participant-details" style="display:none;">
         <p>
-          <%= p.label :date_of_birth %>
-          <%= p.text_field :date_of_birth, class: 'form-control', :readonly => true%>
-        </p>
-        <p>
           <%= p.label :gender %>
           <%= p.select :gender, Participant.genders.keys.map {|gender| [gender.titleize,gender]}, {}, { :class => 'form-control', :readonly => true }%>
         </p>
@@ -24,8 +20,9 @@
           <%= p.text_field :group, class: 'form-control', :readonly => true %>
         </p>
         <p>
-          <%= f.input :notify_participant, as: :boolean%>
-          <small>By checking this checkbox, the participant will be sent an email with instructions to fill out this food diary. You cannot check this if you have not previous set an email address for the participant.</small>
+          <%= p.label :email %>
+          <%= p.text_field :email, class: 'form-control', placeholder: 'user@domain.com', type: 'email'%>
+          <small>Enter an email address to notify the participant with instructions to fill out this food diary.</small>
         </p>
       </div>
       <hr>
@@ -54,13 +51,6 @@
         $('#food_diary_participant_gender').val(data.gender);
         $('#food_diary_participant_date_of_birth').val(data.date_of_birth_formatted);
         $('#food_diary_participant_group').val(data.group);
-
-        if (data.email == '') {
-          $('#food_diary_notify_participant').prop('checked', false);
-          $('#food_diary_notify_participant').prop('disabled', true);
-        } else {
-          $('#food_diary_notify_participant').prop('disabled', false);
-        }
 
         $('#participant-details').show();
       }
