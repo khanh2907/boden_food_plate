@@ -7,8 +7,6 @@ class Participant < ActiveRecord::Base
   has_many :food_diaries
 
   validates :pid, presence: true, uniqueness: true
-  validates :pid, length: { is: 5 }
-  validates :pid, format: {with: /\d{2}\/[a-zA-Z]{2}/}
 
   validates :gender, presence: true
 

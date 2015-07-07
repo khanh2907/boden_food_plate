@@ -5,7 +5,7 @@
     <p>
       <%= f.label 'Participant ID', :pid %>
     <div id="search-wrapper">
-      <%= f.text_field :pid, class: 'form-control', placeholder: 'nn/aa', :required => true, :pattern => '\d{2}\/[a-zA-Z]{2}', "data-parsley-pattern-message" => 'Incorrect format. It must be Participant ID / First and Last Initials', :readonly => !@participant.new_record?%>
+      <%= f.text_field :pid, class: 'form-control', placeholder: 'nn/aa', :required => true, :readonly => !@participant.new_record?%>
     </div>
     </p>
     <p>
@@ -35,5 +35,3 @@
 <script>
 
 </script>
-
-
